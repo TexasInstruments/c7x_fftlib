@@ -17,10 +17,8 @@
  * \ingroup fftlib_util
  * \brief
  * \details
- * \param[in] numRows
- * \param[in] CbackDestination
- * \param[in] paramsC
- * \return  void
+ * \param[in] numRows         Number of rows to store from the C accumulator
+ * \param[in] CbackDestination Pointer to the destination buffer for C-back data
  */
 /******************************************************************************/
 #ifdef __cplusplus

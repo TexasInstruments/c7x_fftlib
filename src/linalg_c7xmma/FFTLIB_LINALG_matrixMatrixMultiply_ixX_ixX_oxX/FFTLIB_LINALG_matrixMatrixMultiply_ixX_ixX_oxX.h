@@ -12,8 +12,7 @@ extern "C" {
 #endif
 
 /*!
- * @defgroup FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX
- * FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX
+ * @defgroup FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX
  * @brief Kernel for multiplying two matrices
  *
  * @details
@@ -22,7 +21,7 @@ extern "C" {
  *          - C = AB
  *
  * @ingroup  FFTLIB_LINALG */
-/* @{ */
+/** @{ */
 
 /*!
  *********************************************************************************
@@ -47,8 +46,7 @@ typedef enum {
  */
 
 typedef struct {
-   int8_t funcStyle; //!< Variant of the function; refer to @ref
-                     //!< FFTLIB_FUNCTION_STYLE
+   int8_t funcStyle; //!< Variant of the function; refer to @ref FFTLIB_FUNCTION_STYLE
    int8_t shift;     //!< Output shift value
 } FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_InitArgs;
 
@@ -73,20 +71,16 @@ int32_t FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_getHandleSize(
  *               and results are stored in the handle
  *
  *  @param [in]  handle       :  Active handle to the kernel
- *  @param [in]  src0_addr    :  Pointer to the structure (@ref
- FFTLIB_bufParams2D_t) containing dimensional
+ *  @param [in]  src0_addr    :  Pointer to the structure (FFTLIB_bufParams2D_t) containing dimensional
  *                               information of src0
- *  @param [in]  src1_addr    :  Pointer to the structure (@ref
- FFTLIB_bufParams2D_t) containing dimensional
+ *  @param [in]  src1_addr    :  Pointer to the structure (FFTLIB_bufParams2D_t) containing dimensional
  *                               information of src1
- *  @param [out] dst_addr     :  Pointer to the structure (@ref
- FFTLIB_bufParams2D_t) containing dimensional
+ *  @param [out] dst_addr     :  Pointer to the structure (FFTLIB_bufParams2D_t) containing dimensional
  *                               information of dst
  *  @param [in]  pKerInitArgs :  Pointer to the structure holding init
  parameters
 
- *  @return      Status of success or error with error codes, refer to @ref
- FFTLIB_STATUS.
+ *  @return      Status of success or error with error codes, refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     Application is expected to provide a valid handle
  *******************************************************************************
@@ -114,8 +108,7 @@ FFTLIB_STATUS FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_init(
  *  @param [in]  pKerInitArgs :  Pointer to the structure holding init
  parameters
 
- *  @return      Status of success or error with error codes, refer to @ref
- FFTLIB_STATUS.
+ *  @return      Status of success or error with error codes, refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     None
  *******************************************************************************
@@ -142,8 +135,7 @@ FFTLIB_STATUS FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_init_checkParams(
  *  @param [out] dst[]       : Pointer to buffer holding the output matrix
  *                              [ C matrix]
 
- *  @return      Status of success or error with error codes, refer to @ref
- FFTLIB_STATUS.
+ *  @return      Status of success or error with error codes, refer to @ref FFTLIB_STATUS.
  *
  *  @par Assumptions:
  *    - I/O buffer pointers are assumed to be not aliased.
@@ -180,8 +172,7 @@ FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_exec(FFTLIB_kernelHandle handle,
  *  @param [out] dst[]       : Pointer to buffer holding the output matrix
  *                              [ C matrix]
 
-*  @return      Status of success or error with error codes, refer to @ref
-FFTLIB_STATUS.
+*  @return      Status of success or error with error codes, refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     None
  *******************************************************************************
@@ -224,7 +215,7 @@ void FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_perfEst(FFTLIB_kernelHandle 
                                                             uint64_t                   *estCycles,
                                                             int32_t                    *caseNumber);
 
-/* @} */
+/** @} */
 
 #ifdef __cplusplus
 }

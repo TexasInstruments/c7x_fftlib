@@ -57,8 +57,7 @@ extern "C" {
  *  @param [out] pBlock           :  Pointer to the buffer that will hold the
  *                                   streaming engine parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- *               FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  */
 
@@ -96,8 +95,7 @@ FFTLIB_STATUS FFTLIB_fft1dBatched_i16sc_c16sc_o16sc_init(int16_t              *p
  *  @param [in]  pBlock           :  Pointer to the buffer that will hold the
  *                                   streaming engine parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- *               FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  */
 
@@ -137,8 +135,7 @@ FFTLIB_STATUS FFTLIB_fft1dBatched_i16sc_c16sc_o16sc_kernel(int16_t              
  *  @param [in]  pBlock           :  Pointer to the buffer that will hold the
  *                                   streaming engine parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- *               FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  */
 

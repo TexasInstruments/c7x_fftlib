@@ -24,7 +24,7 @@ extern "C" {
  * \details
  */
 
-/* @{ */
+/** @{ */
 
 /*! \brief The enumeration of possible activation operations on the computation.
  */
@@ -35,10 +35,12 @@ typedef enum {
    FFTLIB_ROUNDING,         //!< Return result after rounding
 } FFTLIB_activation_type_e; // formerly eMMAActivationType;
 
+/*! \brief The enumeration of possible quantization methods */
 typedef enum {
-   FFTLIB_QUANT_PER_KERNEL  = 0,
-   FFTLIB_QUANT_PER_CHANNEL = 1,
+   FFTLIB_QUANT_PER_KERNEL  = 0, //!< Quantization per kernel (single scale factor)
+   FFTLIB_QUANT_PER_CHANNEL = 1, //!< Quantization per channel (per-channel scale factors)
 } FFTLIB_quantMethod_type_e;
+/*! \brief Alias type for FFTLIB_quantMethod_type_e */
 typedef FFTLIB_quantMethod_type_e FFTLIB_quantMethod_type;
 
 #define FFTLIB_BYTE_WIDTH 64 //!< MMA width in bytes
@@ -68,7 +70,7 @@ typedef FFTLIB_quantMethod_type_e FFTLIB_quantMethod_type;
    ((int32_t) (((uint32_t) 1) << FFTLIB_MMA_SIZE_32_BIT_SHIFT)) //!< Shift for MMA size when data
                                                                 //!< type is 32-bit integers
 
-/* @} */
+/** @} */
 
 #ifdef __cplusplus
 }

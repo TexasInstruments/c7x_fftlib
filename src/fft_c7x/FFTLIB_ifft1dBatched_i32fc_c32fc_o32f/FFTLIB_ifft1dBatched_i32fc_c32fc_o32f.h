@@ -25,7 +25,7 @@
  *          - Supported sizes: 128 to 8192
  * @ingroup  FFT_C7X
  */
-/* @{ */
+/** @{ */
 
 /*!
  * @brief Macro to define the array size for storing SE/SA parameters
@@ -55,7 +55,7 @@ extern "C" {
  *  @param [in]  bufParamsXFFT :  Pointer to the structure containing
  *                                dimensional information of of pXFFT buffer
  *  @param [in]  pSf           :  Pointer to buffer with split factors
- *  @param [in]  bufParamsSF   :  Pointer to the structure containing
+ *  @param [in]  bufParamsSf   :  Pointer to the structure containing
  *                                dimensional information of split factor buffer
  *  @param [out] pY            :  Pointer to buffer with output data
  *  @param [in]  bufParamsY    :  Pointer to the structure containing
@@ -66,8 +66,7 @@ extern "C" {
  *  @param [in]  numChannels   :  Batch size of FFT
  *  @param [in]  inMode        :  Flag to set input as half or full spectrum
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- *               FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  */
 
@@ -101,17 +100,18 @@ FFTLIB_ifft1dBatched_i32fc_c32fc_o32f_init(FFTLIB_F32*           pX,
  *  @param [in]  bufParamsXFFT :  Pointer to the structure containing
  *                                dimensional information of of pXFFT buffer
  *  @param [in]  pSf           :  Pointer to buffer with split factors
- *  @param [in]  bufParamsSF   :  Pointer to the structure containing
+ *  @param [in]  bufParamsSf   :  Pointer to the structure containing
  *                                dimensional information of split factor buffer
  *  @param [out] pY            :  Pointer to buffer with output data
  *  @param [in]  bufParamsY    :  Pointer to the structure containing
  *                                dimensional information of output buffer
+ *  @param [in]  numPoints     :  FFT size (number of complex input samples)
+ *  @param [in]  numChannels   :  Batch size (number of FFTs to process)
  *  @param [in]  inMode        :  Flag to set input as half or full spectrum
  *  @param [in]  pBlock        :  Pointer to the buffer that will hold the
  *                                streaming engine parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- *               FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  */
 
@@ -153,8 +153,7 @@ FFTLIB_ifft1dBatched_i32fc_c32fc_o32f_kernel(FFTLIB_F32* restrict pX,
  *  @param [in]  pBlock       :  Pointer to the buffer that will hold the
  *                               streaming engine parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- *               FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  */
 
 FFTLIB_STATUS
@@ -169,7 +168,15 @@ FFTLIB_ifft1dBatched_i32fc_c32fc_o32f_checkParams(FFTLIB_F32*           pX,
                                                   uint8_t               inMode,
                                                   void*                 pBlock);
 
+/*! @brief Generate split factors for complex-to-real batched IFFT.
+ *  @param [out] pSFactor  Pointer to buffer where split factors are stored
+ *  @param [in]  numPoints FFT size
+ */
 void ifft_c2r_split_factor_gen(FFTLIB_F32* pSFactor, int32_t numPoints);
+/*! @brief Generate twiddle factors for complex-to-real batched IFFT.
+ *  @param [out] pW        Pointer to buffer where twiddle factors are stored
+ *  @param [in]  numPoints FFT size
+ */
 void ifft_c2r_tw_gen(FFTLIB_F32* pW, int32_t numPoints);
 
 /** @} */

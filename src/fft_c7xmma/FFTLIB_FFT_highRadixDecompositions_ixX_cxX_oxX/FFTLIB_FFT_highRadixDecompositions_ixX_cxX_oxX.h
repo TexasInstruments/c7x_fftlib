@@ -12,8 +12,7 @@ extern "C" {
 #endif
 
 /*!
- * @defgroup FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX
- * FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX
+ * @defgroup FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX
  * @brief Kernel for computing DFT by using a high-radix variant of the
  *        FFT alogrithm.
  * @details
@@ -133,8 +132,7 @@ FFTLIB_STATUS FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_getSizes(
  *  @param [in]  bufParamsW   :  Pointer to the structure containing dimensional
  *                               information of computational matrices' buffer
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     pW must point to a buffer of size obtained from the call to
  *               @ref FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_getSizes
@@ -164,8 +162,7 @@ FFTLIB_STATUS FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_twGen(
  *  @param [in]  pKerInitArgs :  Pointer to the structure holding init
  * parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     Application is expected to provide a valid handle.
  */
@@ -195,8 +192,7 @@ FFTLIB_STATUS FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_init(
  *  @param [in]  pKerInitArgs :  Pointer to the structure holding init
  * parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     None
  */
@@ -219,8 +215,7 @@ FFTLIB_STATUS FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_init_checkParams(
  * matrices
  *  @param [out] pY          : Pointer to buffer holding the output data
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @par Assumptions:
  *    - None
@@ -232,8 +227,7 @@ FFTLIB_STATUS FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_init_checkParams(
  *
  *  @remarks     Before calling this function, application is expected to call
  *               @ref FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_init and
- *               @ref
- * FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_exec_checkParams functions.
+ *               @ref FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_exec_checkParams functions.
  *               This ensures resource configuration and error checks are done
  * only once for several invocations of this function.
  */
@@ -258,8 +252,7 @@ FFTLIB_FFT_highRadixDecompositions_ixX_cxX_oxX_exec(FFTLIB_kernelHandle handle,
  * matrices
  *  @param [out] pY          : Pointer to buffer holding the output matrix
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     None
  */

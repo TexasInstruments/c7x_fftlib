@@ -12,8 +12,7 @@
  * \ingroup fftlib_util
  * \brief   load numRows of B into the Bload buffer
  * \details use streaming engine 1 to load numRows of B into the Bload buffer
- * \param  numRows
- * \return  void
+ * \param[in] numRows  Number of rows of B to load into the Bload buffer
  */
 /******************************************************************************/
 __INLINE_FUNC(FFTLIB_UTIL_SE1Bload)

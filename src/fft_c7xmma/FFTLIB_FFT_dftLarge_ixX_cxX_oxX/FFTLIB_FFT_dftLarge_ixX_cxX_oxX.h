@@ -88,8 +88,7 @@ int32_t FFTLIB_FFT_dftLarge_ixX_cxX_oxX_getHandleSize(FFTLIB_FFT_dftLarge_ixX_cx
  *  @param [in]  bufParamsY   :  Pointer to the structure containing
  * dimensional information of ouput buffer
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     Application is expected to allocate buffers of the requested
  *               size, fill in the input data and DFT computational matrix
@@ -112,8 +111,7 @@ FFTLIB_STATUS FFTLIB_FFT_dftLarge_ixX_cxX_oxX_getSizes(const FFTLIB_FFT_dftLarge
  *  @param [in]  bufParamsW   :  Pointer to the structure containing
  * dimensional information of DFT computational matrix buffer
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     pW must point to a buffer of size obtained from the call to
  *               @ref FFTLIB_FFT_dftLarge_ixX_cxX_oxX_getSizes function.
@@ -140,8 +138,7 @@ FFTLIB_STATUS FFTLIB_FFT_dftLarge_ixX_cxX_oxX_twGen(const FFTLIB_FFT_dftLarge_ix
  *  @param [in]  pKerInitArgs :  Pointer to the structure holding init
  * parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     Application is expected to provide a valid handle.
  */
@@ -170,8 +167,7 @@ FFTLIB_STATUS FFTLIB_FFT_dftLarge_ixX_cxX_oxX_init(FFTLIB_kernelHandle          
  *  @param [in]  pKerInitArgs :  Pointer to the structure holding init
  * parameters
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     None
  */
@@ -194,8 +190,7 @@ FFTLIB_FFT_dftLarge_ixX_cxX_oxX_init_checkParams(FFTLIB_kernelHandle            
  * computational matrix
  *  @param [out] pY          : Pointer to buffer holding the output data
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @par Assumptions:
  *    - None
@@ -232,8 +227,7 @@ FFTLIB_STATUS FFTLIB_FFT_dftLarge_ixX_cxX_oxX_exec(FFTLIB_kernelHandle handle,
  * computational matrix
  *  @param [out] pY          : Pointer to buffer holding the output matrix
  *
- *  @return      Status value indicating success or failure. Refer to @ref
- * FFTLIB_STATUS.
+ *  @return      Status value indicating success or failure. Refer to @ref FFTLIB_STATUS.
  *
  *  @remarks     None
  */

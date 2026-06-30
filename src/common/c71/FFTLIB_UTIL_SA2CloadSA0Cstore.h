@@ -17,11 +17,9 @@
  * \ingroup  fftlib_util
  * \brief
  * \details
- * \param[in] numRows
- * \param[in] numBRows
- * \param[in] CbackSource
- * \param[in] CbackDestination
- * \return  void
+ * \param[in] numRows         Number of rows to load and store
+ * \param[in] CbackSource     Pointer to the source buffer for C-back data
+ * \param[in] CbackDestination Pointer to the destination buffer for C-back data
  */
 /******************************************************************************/
 
