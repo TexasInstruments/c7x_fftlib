@@ -40,5 +40,37 @@ void butterfly4x4(FFTLIB_F32  point0Re,
                   FFTLIB_F32  x3TwIm,
                   FFTLIB_F32 *bflyOut);
 
+void butterfly5x5(FFTLIB_F32  p0Re,
+                  FFTLIB_F32  p0Im,
+                  FFTLIB_F32  p1Re,
+                  FFTLIB_F32  p1Im,
+                  FFTLIB_F32  p2Re,
+                  FFTLIB_F32  p2Im,
+                  FFTLIB_F32  p3Re,
+                  FFTLIB_F32  p3Im,
+                  FFTLIB_F32  p4Re,
+                  FFTLIB_F32  p4Im,
+                  FFTLIB_F32  w1Re,
+                  FFTLIB_F32  w1Im,
+                  FFTLIB_F32  w2Re,
+                  FFTLIB_F32  w2Im,
+                  FFTLIB_F32  w3Re,
+                  FFTLIB_F32  w3Im,
+                  FFTLIB_F32  w4Re,
+                  FFTLIB_F32  w4Im,
+                  FFTLIB_F32 *bflyOut);
+               
+void butterfly3x3(FFTLIB_F32  x0_inRe,
+                  FFTLIB_F32  x0_inIm,
+                  FFTLIB_F32  x1_inRe,
+                  FFTLIB_F32  x1_inIm,
+                  FFTLIB_F32  x2_inRe,
+                  FFTLIB_F32  x2_inIm,
+                  FFTLIB_F32  w1Re,
+                  FFTLIB_F32  w1Im,
+                  FFTLIB_F32  w2Re,
+                  FFTLIB_F32  w2Im,
+                  FFTLIB_F32 *bflyOut);
+
 void ifft_i32fc_o32fc_conjugate_cn(void *pX, uint32_t size);
 #endif

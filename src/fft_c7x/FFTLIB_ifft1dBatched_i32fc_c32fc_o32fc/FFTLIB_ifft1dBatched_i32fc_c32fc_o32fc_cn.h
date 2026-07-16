@@ -28,6 +28,26 @@ FFTLIB_STATUS FFTLIB_ifft1dBatched_i32fc_c32fc_o32fc_checkParams_cn(FFTLIB_F32  
 
 uint32_t bitr(uint32_t in, uint32_t maxValue);
 
+void butterfly5x5(FFTLIB_F32  x0_inRe,
+                  FFTLIB_F32  x0_inIm,
+                  FFTLIB_F32  x1_inRe,
+                  FFTLIB_F32  x1_inIm,
+                  FFTLIB_F32  x2_inRe,
+                  FFTLIB_F32  x2_inIm,
+                  FFTLIB_F32  x3_inRe,
+                  FFTLIB_F32  x3_inIm,
+                  FFTLIB_F32  x4_inRe,
+                  FFTLIB_F32  x4_inIm,
+                  FFTLIB_F32  w1Re,
+                  FFTLIB_F32  w1Im,
+                  FFTLIB_F32  w2Re,
+                  FFTLIB_F32  w2Im,
+                  FFTLIB_F32  w3Re,
+                  FFTLIB_F32  w3Im,
+                  FFTLIB_F32  w4Re,
+                  FFTLIB_F32  w4Im,
+                  FFTLIB_F32 *bflyOut);
+
 void butterfly4x4(FFTLIB_F32  point0Re,
                   FFTLIB_F32  point0Im,
                   FFTLIB_F32  point1Re,
@@ -42,6 +62,18 @@ void butterfly4x4(FFTLIB_F32  point0Re,
                   FFTLIB_F32  x2TwIm,
                   FFTLIB_F32  x3TwRe,
                   FFTLIB_F32  x3TwIm,
+                  FFTLIB_F32 *bflyOut);
+
+void butterfly3x3(FFTLIB_F32  x0_inRe,
+                  FFTLIB_F32  x0_inIm,
+                  FFTLIB_F32  x1_inRe,
+                  FFTLIB_F32  x1_inIm,
+                  FFTLIB_F32  x2_inRe,
+                  FFTLIB_F32  x2_inIm,
+                  FFTLIB_F32  w1Re,
+                  FFTLIB_F32  w1Im,
+                  FFTLIB_F32  w2Re,
+                  FFTLIB_F32  w2Im,
                   FFTLIB_F32 *bflyOut);
 
 void ifft_i32fc_o32fc_conjugate_cn(void *pX, uint32_t size);

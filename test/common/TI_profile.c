@@ -161,7 +161,7 @@ void TI_profile_add_test(uint32_t testNum,
    testId++;
 
    //#if !defined(EVM_TEST)
-   compute_cycles = cycles[TI_PROFILE_KERNEL_OPT];
+   compute_cycles = cycles[TI_PROFILE_KERNEL_OPT_WARM];
    if (!errorFlag) {
       sprintf(TI_test_print_buffer, "|%4d |%4d | PASS", testId, testNum);
       TI_test_print_string(TI_test_print_buffer);

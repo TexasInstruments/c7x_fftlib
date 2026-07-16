@@ -120,7 +120,7 @@ def gen_test_case_header_file(testCase):
 
 testCasesCsvFile = "test_cases_list.csv"
 testIdList = []
-testIdList += range(0, 100)
+testIdList += range(0, 110)
 
 
 with open(testCasesCsvFile) as csv_file:
