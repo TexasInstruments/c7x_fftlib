@@ -7,6 +7,14 @@
 /* CODE_SECTION (FFTLIB_fft1d_i32fc_c32fc_o32fc_cn, ".text:ansi") */
 /* CODE_SECTION (FFTLIB_fft1d_i32fc_c32fc_o32fc_checkParams_cn, ".text:ansi") */
 
+/*DFT twiddles */
+#define COS_TWO_PI_DIV_3    0.5f      /* cos(2π/3) */                            
+#define SIN_TWO_PI_DIV_3    0.86602540378443871f /* sin(2π/3) */                                                                  
+#define COS_TWO_PI_DIV_5    0.30901699437494745f /* cos(2π/5) */                                                                  
+#define SIN_TWO_PI_DIV_5    0.95105651629515353f /* sin(2π/5) */                                                                  
+#define COS_FOUR_PI_DIV_5   0.80901699437494734f /* cos(4π/5) */                                                                 
+#define SIN_FOUR_PI_DIV_5   0.58778525229247325f /* sin(4π/5) */ 
+
 void butterfly4x4(FFTLIB_F32  point0Re,
                   FFTLIB_F32  point0Im,
                   FFTLIB_F32  point1Re,
@@ -64,6 +72,113 @@ void butterfly4x4(FFTLIB_F32  point0Re,
    bflyOut[7] = x3Im;
 }
 
+void butterfly5x5 (FFTLIB_F32  p0Re,
+                   FFTLIB_F32  p0Im,
+                   FFTLIB_F32  p1Re,
+                   FFTLIB_F32  p1Im,
+                   FFTLIB_F32  p2Re,
+                   FFTLIB_F32  p2Im,
+                   FFTLIB_F32  p3Re,
+                   FFTLIB_F32  p3Im,
+                   FFTLIB_F32  p4Re,
+                   FFTLIB_F32  p4Im,
+                   FFTLIB_F32  w1Re, FFTLIB_F32  w1Im,
+                   FFTLIB_F32  w2Re, FFTLIB_F32  w2Im,
+                   FFTLIB_F32  w3Re, FFTLIB_F32  w3Im,
+                   FFTLIB_F32  w4Re, FFTLIB_F32  w4Im,
+                   FFTLIB_F32 *bflyOut)
+{
+   FFTLIB_F32 XbaseRe[5], XbaseIm[5];
+
+   XbaseRe[0] = p0Re + p1Re + p2Re + p3Re + p4Re;
+   XbaseIm[0] = p0Im + p1Im + p2Im + p3Im + p4Im;
+
+   XbaseRe[1] = p0Re
+              + p1Re *  COS_TWO_PI_DIV_5 + p1Im *  SIN_TWO_PI_DIV_5
+              + p2Re * -COS_FOUR_PI_DIV_5 + p2Im *  SIN_FOUR_PI_DIV_5
+              + p3Re * -COS_FOUR_PI_DIV_5 + p3Im * -SIN_FOUR_PI_DIV_5
+              + p4Re *  COS_TWO_PI_DIV_5 + p4Im * -SIN_TWO_PI_DIV_5;
+   XbaseIm[1] = p0Im
+              + p1Re * -SIN_TWO_PI_DIV_5 + p1Im *  COS_TWO_PI_DIV_5
+              + p2Re * -SIN_FOUR_PI_DIV_5 + p2Im * -COS_FOUR_PI_DIV_5
+              + p3Re *  SIN_FOUR_PI_DIV_5 + p3Im * -COS_FOUR_PI_DIV_5
+              + p4Re *  SIN_TWO_PI_DIV_5 + p4Im *  COS_TWO_PI_DIV_5;
+
+   XbaseRe[2] = p0Re
+              + p1Re * -COS_FOUR_PI_DIV_5 + p1Im *  SIN_FOUR_PI_DIV_5
+              + p2Re *  COS_TWO_PI_DIV_5 + p2Im * -SIN_TWO_PI_DIV_5
+              + p3Re *  COS_TWO_PI_DIV_5 + p3Im *  SIN_TWO_PI_DIV_5
+              + p4Re * -COS_FOUR_PI_DIV_5 + p4Im * -SIN_FOUR_PI_DIV_5;
+   XbaseIm[2] = p0Im
+              + p1Re * -SIN_FOUR_PI_DIV_5 + p1Im * -COS_FOUR_PI_DIV_5
+              + p2Re *  SIN_TWO_PI_DIV_5 + p2Im *  COS_TWO_PI_DIV_5
+              + p3Re * -SIN_TWO_PI_DIV_5 + p3Im *  COS_TWO_PI_DIV_5
+              + p4Re *  SIN_FOUR_PI_DIV_5 + p4Im * -COS_FOUR_PI_DIV_5;
+
+   XbaseRe[3] = p0Re
+              + p1Re * -COS_FOUR_PI_DIV_5 + p1Im * -SIN_FOUR_PI_DIV_5
+              + p2Re *  COS_TWO_PI_DIV_5 + p2Im *  SIN_TWO_PI_DIV_5
+              + p3Re *  COS_TWO_PI_DIV_5 + p3Im * -SIN_TWO_PI_DIV_5
+              + p4Re * -COS_FOUR_PI_DIV_5 + p4Im *  SIN_FOUR_PI_DIV_5;
+   XbaseIm[3] = p0Im
+              + p1Re *  SIN_FOUR_PI_DIV_5 + p1Im * -COS_FOUR_PI_DIV_5
+              + p2Re * -SIN_TWO_PI_DIV_5 + p2Im *  COS_TWO_PI_DIV_5
+              + p3Re *  SIN_TWO_PI_DIV_5 + p3Im *  COS_TWO_PI_DIV_5
+              + p4Re * -SIN_FOUR_PI_DIV_5 + p4Im * -COS_FOUR_PI_DIV_5;
+
+   XbaseRe[4] = p0Re
+              + p1Re *  COS_TWO_PI_DIV_5 + p1Im * -SIN_TWO_PI_DIV_5
+              + p2Re * -COS_FOUR_PI_DIV_5 + p2Im * -SIN_FOUR_PI_DIV_5
+              + p3Re * -COS_FOUR_PI_DIV_5 + p3Im *  SIN_FOUR_PI_DIV_5
+              + p4Re *  COS_TWO_PI_DIV_5 + p4Im *  SIN_TWO_PI_DIV_5;
+   XbaseIm[4] = p0Im
+              + p1Re *  SIN_TWO_PI_DIV_5 + p1Im *  COS_TWO_PI_DIV_5
+              + p2Re *  SIN_FOUR_PI_DIV_5 + p2Im * -COS_FOUR_PI_DIV_5
+              + p3Re * -SIN_FOUR_PI_DIV_5 + p3Im * -COS_FOUR_PI_DIV_5
+              + p4Re * -SIN_TWO_PI_DIV_5 + p4Im *  COS_TWO_PI_DIV_5;
+
+   bflyOut[0] = XbaseRe[0];
+   bflyOut[1] = XbaseIm[0];
+   bflyOut[2] = XbaseRe[1] * w1Re - XbaseIm[1] * w1Im;
+   bflyOut[3] = XbaseRe[1] * w1Im + XbaseIm[1] * w1Re;
+   bflyOut[4] = XbaseRe[2] * w2Re - XbaseIm[2] * w2Im;
+   bflyOut[5] = XbaseRe[2] * w2Im + XbaseIm[2] * w2Re;
+   bflyOut[6] = XbaseRe[3] * w3Re - XbaseIm[3] * w3Im;
+   bflyOut[7] = XbaseRe[3] * w3Im + XbaseIm[3] * w3Re;
+   bflyOut[8] = XbaseRe[4] * w4Re - XbaseIm[4] * w4Im;
+   bflyOut[9] = XbaseRe[4] * w4Im + XbaseIm[4] * w4Re;
+}
+void butterfly3x3 (FFTLIB_F32  x0Re,
+                   FFTLIB_F32  x0Im,
+                   FFTLIB_F32  x1Re,
+                   FFTLIB_F32  x1Im,
+                   FFTLIB_F32  x2Re,
+                   FFTLIB_F32  x2Im,
+                   FFTLIB_F32  w1Re,
+                   FFTLIB_F32  w1Im,
+                   FFTLIB_F32  w2Re,
+                   FFTLIB_F32  w2Im,
+                   FFTLIB_F32 *bflyOut)
+{
+   FFTLIB_F32 XbaseRe[3], XbaseIm[3];
+
+   XbaseRe[0] = x0Re + x1Re + x2Re;
+   XbaseIm[0] = x0Im + x1Im + x2Im;
+
+   XbaseRe[1] = x0Re - x1Re * COS_TWO_PI_DIV_3 + x1Im * SIN_TWO_PI_DIV_3 - x2Re * COS_TWO_PI_DIV_3 - x2Im * SIN_TWO_PI_DIV_3;
+   XbaseIm[1] = x0Im - x1Re * SIN_TWO_PI_DIV_3 - x1Im * COS_TWO_PI_DIV_3 + x2Re * SIN_TWO_PI_DIV_3 - x2Im * COS_TWO_PI_DIV_3;
+
+   XbaseRe[2] = x0Re - x1Re * COS_TWO_PI_DIV_3 - x1Im * SIN_TWO_PI_DIV_3 - x2Re * COS_TWO_PI_DIV_3 + x2Im * SIN_TWO_PI_DIV_3;
+   XbaseIm[2] = x0Im + x1Re * SIN_TWO_PI_DIV_3 - x1Im * COS_TWO_PI_DIV_3 - x2Re * SIN_TWO_PI_DIV_3 - x2Im * COS_TWO_PI_DIV_3;
+
+   bflyOut[0] = XbaseRe[0];
+   bflyOut[1] = XbaseIm[0];
+   bflyOut[2] = XbaseRe[1] * w1Re - XbaseIm[1] * w1Im;
+   bflyOut[3] = XbaseRe[1] * w1Im + XbaseIm[1] * w1Re;
+   bflyOut[4] = XbaseRe[2] * w2Re - XbaseIm[2] * w2Im;
+   bflyOut[5] = XbaseRe[2] * w2Im + XbaseIm[2] * w2Re;
+}
+
 uint32_t bitr(uint32_t in, uint32_t maxValue)
 {
    uint32_t i;
@@ -94,7 +209,7 @@ FFTLIB_fft1d_i32fc_c32fc_o32fc_cn(FFTLIB_F32           *pX,
                                   FFTLIB_bufParams1D_t *bufParamsY)
 {
    FFTLIB_STATUS status = FFTLIB_SUCCESS;
-   FFTLIB_F32    bflyOut[4 * 2];
+   FFTLIB_F32    bflyOut[5 * 2];
    uint32_t      numPoints;
    uint32_t      numPointsPerDft;
    uint32_t      dftIndex;
@@ -102,6 +217,7 @@ FFTLIB_fft1d_i32fc_c32fc_o32fc_cn(FFTLIB_F32           *pX,
    uint32_t      dftPointIndex;
    FFTLIB_F32   *pWLocal;
    uint32_t      k;
+   uint32_t      r5, r3, r4, r2;
 
 #ifdef FFTLIB_CHECK_PARAMS
    /* status = FFTLIB_fft1d_i32fc_c32fc_o32fc_checkParams_cn ( */
@@ -112,7 +228,136 @@ FFTLIB_fft1d_i32fc_c32fc_o32fc_cn(FFTLIB_F32           *pX,
       numPoints       = (bufParamsX->dim_x) >> 1;
       numPointsPerDft = numPoints;
       pWLocal         = pW;
-      while (numPointsPerDft > 2U) {
+
+      /* Calculate FFT stages decomposition */
+      uint32_t stageNumPoints = numPoints;
+      uint32_t numRadix5Stages = 0;
+      uint32_t numRadix3Stages = 0;
+      uint32_t numRadix4Stages = 0;
+      uint32_t numRadix2Stages = 0;
+
+      while (stageNumPoints > 1U) {
+         if (stageNumPoints % 5U == 0U) {
+            numRadix5Stages++;
+            stageNumPoints /= 5U;
+         }
+         else if (stageNumPoints % 3U == 0U) {
+            numRadix3Stages++;
+            stageNumPoints /= 3U;
+         }
+         else if (stageNumPoints % 4U == 0U) {
+            numRadix4Stages++;
+            stageNumPoints /= 4U;
+         }
+         else if (stageNumPoints % 2U == 0U) {
+            numRadix2Stages++;
+            stageNumPoints /= 2U;
+         }
+         else {
+            break;
+         }
+      }
+
+      /* Execute Radix-5 stages */
+      for (r5 = 0; r5 < numRadix5Stages; r5++) {
+         for (k = 0; k < (numPoints / 5U); k++) {
+            dftIndex       = k / (numPointsPerDft / 5U);
+            dftStartOffset = dftIndex * numPointsPerDft;
+            dftPointIndex  = k % (numPointsPerDft / 5U);
+
+            butterfly5x5 (
+                pX[(dftStartOffset * 2U) + (2U * dftPointIndex)],
+                pX[(dftStartOffset * 2U) + (2U * dftPointIndex) + 1U],
+                pX[(dftStartOffset * 2U) + ((numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex)],
+                pX[(dftStartOffset * 2U) + ((numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex) + 1U],
+                pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex)],
+                pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex) + 1U],
+                pX[(dftStartOffset * 2U) + (3U * (numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex)],
+                pX[(dftStartOffset * 2U) + (3U * (numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex) + 1U],
+                pX[(dftStartOffset * 2U) + (4U * (numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex)],
+                pX[(dftStartOffset * 2U) + (4U * (numPointsPerDft / 5U) * 2U) +
+                   (2U * dftPointIndex) + 1U],
+                pWLocal[dftPointIndex * 2U],
+                pWLocal[(dftPointIndex * 2) + 1U],
+                pWLocal[((numPointsPerDft / 5U) * 2U) + (dftPointIndex * 2U)],
+                pWLocal[((numPointsPerDft / 5U) * 2U) + (dftPointIndex * 2) + 1U],
+                pWLocal[(2U * (numPointsPerDft / 5U) * 2U) + (dftPointIndex * 2U)],
+                pWLocal[(2U * (numPointsPerDft / 5U) * 2U) + (dftPointIndex * 2) + 1U],
+                pWLocal[(3U * (numPointsPerDft / 5U) * 2U) + (dftPointIndex * 2U)],
+                pWLocal[(3U * (numPointsPerDft / 5U) * 2U) + (dftPointIndex * 2) + 1U],
+                bflyOut);
+
+            pX[(dftStartOffset * 2U) + (2U * dftPointIndex)]     = bflyOut[0];
+            pX[(dftStartOffset * 2U) + (2U * dftPointIndex) + 1U] = bflyOut[1];
+            pX[(dftStartOffset * 2U) + ((numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex)]                          = bflyOut[2];
+            pX[(dftStartOffset * 2U) + ((numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex) + 1U]                      = bflyOut[3];
+            pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex)]                          = bflyOut[4];
+            pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex) + 1U]                      = bflyOut[5];
+            pX[(dftStartOffset * 2U) + (3U * (numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex)]                          = bflyOut[6];
+            pX[(dftStartOffset * 2U) + (3U * (numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex) + 1U]                      = bflyOut[7];
+            pX[(dftStartOffset * 2U) + (4U * (numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex)]                          = bflyOut[8];
+            pX[(dftStartOffset * 2U) + (4U * (numPointsPerDft / 5U) * 2U) +
+               (2U * dftPointIndex) + 1U]                      = bflyOut[9];
+         }
+         numPointsPerDft /= 5U;
+
+         pWLocal += 4U * numPointsPerDft * 2U;
+      }
+      /* Execute Radix-3 stages */
+      for (r3 = 0; r3 < numRadix3Stages; r3++) {
+         for (k = 0; k < (numPoints / 3U); k++) {
+            dftIndex       = k / (numPointsPerDft / 3U);
+            dftStartOffset = dftIndex * numPointsPerDft;
+            dftPointIndex  = k % (numPointsPerDft / 3U);
+
+            butterfly3x3 (
+               pX[(dftStartOffset * 2U) + (2U * dftPointIndex)],
+               pX[(dftStartOffset * 2U) + (2U * dftPointIndex) + 1U],
+               pX[(dftStartOffset * 2U) + ((numPointsPerDft / 3U) * 2U) +
+                  (2U * dftPointIndex)],
+               pX[(dftStartOffset * 2U) + ((numPointsPerDft / 3U) * 2U) +
+                  (2U * dftPointIndex) + 1U],
+               pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 3U) * 2U) +
+                  (2U * dftPointIndex)],
+               pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 3U) * 2U) +
+                  (2U * dftPointIndex) + 1U],
+               pWLocal[dftPointIndex * 2U],
+               pWLocal[(dftPointIndex * 2) + 1U],
+               pWLocal[((numPointsPerDft / 3U) * 2U) + (dftPointIndex * 2U)],
+               pWLocal[((numPointsPerDft / 3U) * 2U) + (dftPointIndex * 2) + 1U],
+               bflyOut);
+
+            pX[(dftStartOffset * 2U) + (2U * dftPointIndex)]     = bflyOut[0];
+            pX[(dftStartOffset * 2U) + (2U * dftPointIndex) + 1U] = bflyOut[1];
+            pX[(dftStartOffset * 2U) + ((numPointsPerDft / 3U) * 2U) +
+               (2U * dftPointIndex)]                          = bflyOut[2];
+            pX[(dftStartOffset * 2U) + ((numPointsPerDft / 3U) * 2U) +
+               (2U * dftPointIndex) + 1U]                      = bflyOut[3];
+            pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 3U) * 2U) +
+               (2U * dftPointIndex)]                          = bflyOut[4];
+            pX[(dftStartOffset * 2U) + (2U * (numPointsPerDft / 3U) * 2U) +
+               (2U * dftPointIndex) + 1U]                      = bflyOut[5];
+         }
+         numPointsPerDft /= 3U;
+         pWLocal += 2U * numPointsPerDft * 2U;
+      }
+
+      /* Execute Radix-4 stages */
+      for (r4 = 0; r4 < numRadix4Stages; r4++) {
          for (k = 0; k < (numPoints / 4U); k++) {
             dftIndex       = k / (numPointsPerDft / 4U);
             dftStartOffset = dftIndex * numPointsPerDft;
@@ -146,7 +391,8 @@ FFTLIB_fft1d_i32fc_c32fc_o32fc_cn(FFTLIB_F32           *pX,
          pWLocal += 3U * numPointsPerDft * 2U;
       }
 
-      if (numPointsPerDft == 2U) {
+      /* Execute Radix-2 stages */
+      for (r2 = 0; r2 < numRadix2Stages; r2++) {
          for (k = 0; k < (numPoints / 2U); k++) {
             bflyOut[0] = pX[((2U * k) * 2U)] + pX[(((2U * k) + 1U) * 2U)];
             bflyOut[1] = pX[((2U * k) * 2U) + 1U] + pX[(((2U * k) + 1U) * 2U) + 1U];
@@ -158,18 +404,87 @@ FFTLIB_fft1d_i32fc_c32fc_o32fc_cn(FFTLIB_F32           *pX,
             pX[(((2U * k) + 1U) * 2U)]      = bflyOut[2];
             pX[(((2U * k) + 1U) * 2U) + 1U] = bflyOut[3];
          }
+         numPointsPerDft /= 2U;
       }
 
       /* Do swap of points between bit-reversed locations */
-      for (k = 0; k < numPoints; k++) {
-         uint32_t kBitr;
 
-         kBitr             = bitr(k, numPoints - 1U);
-         pY[2U * k]        = pX[2 * kBitr];
-         pY[(2U * k) + 1U] = pX[(2U * kBitr) + 1U];
+      /* check if the numPoints is only power of 2 */
+      uint32_t isPowerOf2 = (numRadix3Stages == 0 && numRadix5Stages == 0) ? 1U : 0U;
+
+      if (isPowerOf2) {
+         /* use bit-reversal */
+         for (k = 0; k < numPoints; k++) {
+            uint32_t kBitr;
+
+            kBitr         = bitr (k, numPoints - 1U);
+            pY[2U * k]     = pX[2 * kBitr];
+            pY[(2U * k) + 1U] = pX[(2U * kBitr) + 1U];
+         }
+      }
+      else
+      {
+         /* use digit-reversal */
+         uint32_t radixSeq[32], numRadixStages = 0U;
+         uint32_t tempCheck = numPoints;
+
+         /* Radix-5 */
+         while (tempCheck % 5U == 0U) 
+         {
+            radixSeq[numRadixStages++] = 5U; 
+            tempCheck /= 5U; 
+         }
+         /* Radix-3 */
+         while (tempCheck % 3U == 0U) 
+         { 
+            radixSeq[numRadixStages++] = 3U;
+            tempCheck /= 3U; 
+         }
+         /* Radix-4 */
+         while (tempCheck % 4U == 0U) 
+         {
+            radixSeq[numRadixStages++] = 2U;
+            radixSeq[numRadixStages++] = 2U;
+            tempCheck /= 4U;
+         }
+         /* Radix-2 */
+         if (tempCheck == 2U) 
+         {
+            radixSeq[numRadixStages++] = 2U;
+            tempCheck /= 2U;
+         }
+
+         /* Apply mixed-radix digit-reversal permutation */
+         for (k = 0U; k < numPoints; k++) 
+         {
+            /* Extract digits of k in the radix sequence */
+            uint32_t kTemp = k;
+            uint32_t digits[32];
+            uint32_t s;
+
+            for (s = 0U; s < numRadixStages; s++) 
+            {
+               digits[s] = kTemp % radixSeq[s];
+               kTemp /= radixSeq[s];
+            }
+
+            /* Recompose in reversed stage order */
+            uint32_t kBitr = 0U;
+            uint32_t mult = 1U;
+            int32_t sRev;
+
+            for (sRev =numRadixStages - 1; sRev >= 0; sRev--) 
+            {
+               kBitr += digits[sRev] * mult;
+               mult *= radixSeq[sRev];
+            }
+
+            /* Copy from reversed input position to natural output position */
+            pY[2U * k]       = pX[2U * kBitr];
+            pY[(2U * k) + 1U] = pX[(2U * kBitr) + 1U];
+         }
       }
    }
-
    return (status);
 }
 
@@ -195,16 +510,22 @@ FFTLIB_fft1d_i32fc_c32fc_o32fc_checkParams_cn(FFTLIB_F32           *pX,
       status = FFTLIB_ERR_INVALID_TYPE;
    }
    else {
-      /* Check if number of pts is a power of 2 */
-      uint32_t k = 0;
-      while (k < 32U) {
-         if ((bufParamsX->dim_x & (1u << k)) != 0u) {
-            break;
-         }
-         k++;
+      // Check if number is a power of {2, 3, 5} only (2^a * 3^b * 5^c)
+      uint32_t temp = bufParamsX->dim_x / 2U;  // Get actual numPoints
+      uint32_t i;
+
+      for (i = 0; i < 32U && (temp % 5U == 0U); ++i) {
+         temp /= 5U;
       }
-      if ((1u << k) != bufParamsX->dim_x) {
-         status = FFTLIB_ERR_INVALID_DIMENSION;
+      for (i = 0; i < 32U && (temp % 3U == 0U); ++i) {
+         temp /= 3U;
+      }
+      for (i = 0; i < 32U && (temp % 2U == 0U); ++i) {
+         temp /= 2U;
+      }
+
+      if (temp != 1) {
+         status = FFTLIB_ERR_INVALID_DIMENSION;  // Has prime factors other than 2, 3 and 5
       }
    }
    return (status);

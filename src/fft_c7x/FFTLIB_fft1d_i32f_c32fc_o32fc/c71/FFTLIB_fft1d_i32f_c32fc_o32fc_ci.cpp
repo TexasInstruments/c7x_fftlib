@@ -60,7 +60,7 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_init(FFTLIB_F32           *pX,
                                                  &((uint8_t *) pBlock)[5 * SE_PARAM_SIZE]);
 
       uint32_t elementCount = c7x::element_count_of<CV>::value;
-      uint32_t SEBlocks     = (numPoints >> 1) / elementCount;
+      uint32_t SEBlocks     = ((numPoints >> 1) + elementCount - 1) / elementCount;
       uint32_t offset       = (((uint64_t) pSf - (uint64_t) pXFFT)) / sizeof(cfloat);
 
       se0_param.ICNT0 = elementCount;
@@ -100,7 +100,7 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_init(FFTLIB_F32           *pX,
       *((__SE_TEMPLATE_v1 *) ((uint8_t *) pBlock + SE1_PARAM_OFFSET_LAST)) = se1_param_last;
 
       sa1_param.ICNT0                                                 = elementCount;
-      sa1_param.ICNT1                                                 = (numPoints >> 1) / (elementCount);
+      sa1_param.ICNT1                                                 = ((numPoints >> 1) + elementCount - 1) / (elementCount);
       sa1_param.DIM1                                                  = -(int32_t) elementCount;
       sa1_param.VECLEN                                                = c7x::sa_veclen<CV>::value;
       sa1_param.DIMFMT                                                = __SA_DIMFMT_2D;
@@ -192,7 +192,7 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_kernel(FFTLIB_F32 *restrict pX,
 
 #pragma MUST_ITERATE(8, , 8)
 #pragma UNROLL(8)
-   for (i = 0; i < (numPoints >> 1) / (elementCount); i++) {
+    for (i = 0; i < ((numPoints >> 1) + elementCount - 1) / (elementCount); i++) {
       var0 = c7x::strm_eng<0, CV>::get_adv();
       var1 = c7x::strm_eng<1, CV>::get_adv();
 
@@ -203,15 +203,15 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_kernel(FFTLIB_F32 *restrict pX,
       temp1 = (__complex_conjugate_multiply(var1, c7x::as_cfloat_vec(sFB)));
 
       regStore0 = temp0 + temp1;
-      tmp       = c7x::strm_agen<0, CV>::get_vpred();
-      addr      = c7x::strm_agen<0, CV>::get_adv(&pY[0]);
-      __vstore_pred(tmp, addr, regStore0);
-
       regStore1 = c7x::as_cfloat_vec((c7x::as_ulong_vec(regStore0)) ^ (xorVec));
 
       tmp  = c7x::strm_agen<1, CV>::get_vpred();
       addr = c7x::strm_agen<1, CV>::get_adv(&pY[2 * numPoints + 2 - (elementCount << 1)]);
       __vstore_pred(tmp, addr, (__reverse(regStore1)));
+
+      tmp       = c7x::strm_agen<0, CV>::get_vpred();
+      addr      = c7x::strm_agen<0, CV>::get_adv(&pY[0]);
+      __vstore_pred(tmp, addr, regStore0);
    }
    FFTLIB_asm(" MARK 9");
 
@@ -220,6 +220,9 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_kernel(FFTLIB_F32 *restrict pX,
    /* __SA2_CLOSE (); */
    __SE0_CLOSE();
    __SE1_CLOSE();
+
+    pY[numPoints - 4] = pY[numPoints + 4];
+    pY[numPoints - 3] = -pY[numPoints + 5];
 
    /* __SE1_OPEN (&(pY[numPoints]), se1ParamsLast); */
    /* __SA0_OPEN (sa0Params); */
@@ -287,10 +290,6 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams(FFTLIB_F32           *pX,
    else if (bufParamsX->dim_x != bufParamsW->dim_x || bufParamsX->dim_x != bufParamsY->dim_x) {
       status = FFTLIB_ERR_INVALID_DIMENSION;
    }
-   else if (bufParamsX->dim_x < 64 * 2) { /* Minimum number of points is 64
-                                           */
-      status = FFTLIB_ERR_INVALID_DIMENSION;
-   }
    else if ((bufParamsX->data_type != FFTLIB_FLOAT32) || (bufParamsW->data_type != FFTLIB_FLOAT32) ||
             (bufParamsY->data_type != FFTLIB_FLOAT32)) {
       status = FFTLIB_ERR_INVALID_TYPE;
@@ -301,16 +300,22 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams(FFTLIB_F32           *pX,
                                                        configuration */
    }
    else {
-      /* Check if number of pts is a power of 2 */
-      uint32_t k = 0;
-      while (k < 32) {
-         if (bufParamsX->dim_x & (1u << k)) {
-            break;
-         }
-         k++;
+      /* Check if number of pts is a power of 2 || power of 3 || power of 5 */
+      uint32_t temp = bufParamsX->dim_x / 2U; // Get actual numPoints
+      uint32_t i;
+      
+      for (i = 0; i < 32U && (temp % 5U == 0U); ++i) {
+         temp /= 5U;
       }
-      if ((1u << k) != bufParamsX->dim_x) {
-         status = FFTLIB_ERR_INVALID_DIMENSION;
+      for (i = 0; i < 32U && (temp % 3U == 0U); ++i) {
+         temp /= 3U;
+      }
+      for (i = 0; i < 32U && (temp % 2U == 0U); ++i) {
+         temp /= 2U;
+      }
+
+      if (temp != 1) {
+         status = FFTLIB_ERR_INVALID_DIMENSION; // Has prime factors other than 2 and 5
       }
    }
    return (status);

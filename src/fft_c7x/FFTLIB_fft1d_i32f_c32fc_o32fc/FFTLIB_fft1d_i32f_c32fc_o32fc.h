@@ -14,7 +14,7 @@
  * @details
  *          - The kernel performs FFT of an N-point real sequence using
  *            N/2-point complex FFT, which saves compute time
- *          - The size of data is required to be a power of 2.
+ *          - The size of data is required to be a power of 2 or power of 3 or power of 5.
  *          - The kernel requires application to provide a pre-generated
  *            twiddle factors along with the input data.
  *          - The kernel requires application to provide a pre-generated
@@ -29,7 +29,7 @@
  */
 
 /* PBLOCK has to accommodate certain number of SE/SA configurations */
-#define FFTLIB_FFT1D_I32F_C32FC_O32FC_PBLOCK_SIZE (14 * SE_PARAM_SIZE)
+#define FFTLIB_FFT1D_I32F_C32FC_O32FC_PBLOCK_SIZE (35 * SE_PARAM_SIZE + 18 * sizeof(uint32_t))
 
 #ifdef __cplusplus
 extern "C" {
