@@ -1,0 +1,1967 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="FFTLIB_fft1d_i16sc_c16sc_o16sc.html">
+      
+      
+        <link rel="next" href="FFTLIB_fft1d_i32fc_c32fc_o32fc.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>FFTLIB_fft1d_i32f_c32fc_o32fc - FFTLIB Documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx_immaterial_theme.a027cd878cd91b31c.min.css?v=2be211a8" />
+        <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+        <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+        <link rel="stylesheet" type="text/css" href="../_static/css/theme_overrides.css?v=f0d6db87" />
+        <link rel="stylesheet" type="text/css" href="../_static/css/immaterial_overrides.css?v=82266e3c" />
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+        <link rel="stylesheet" type="text/css" href="../_static/vendor/datatables/datatables.min.css?v=55e1cb7c" />
+        <link rel="stylesheet" type="text/css" href="../_static/vendor/datatables/fixedHeader.min.css?v=8f4ecf88" />
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#breathe-section-title-defines" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="FFTLIB Documentation" class="md-header__button md-logo" aria-label="FFTLIB Documentation" data-md-component="logo">
+      <img src="../_static/ti_logo_mono.svg" alt="logo">
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            <a href="../index.html" style="color:inherit;text-decoration:none">FFTLIB Documentation</a>
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FFTLIB_fft1d_i32f_c32fc_o32fc
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="teal"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/TexasInstruments/c7x_fftlib" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    c7x_fftlib
+    <span class="ti-branch">main</span>
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="FFTLIB Documentation" class="md-nav__button md-logo" aria-label="FFTLIB Documentation" data-md-component="logo">
+      <img src="../_static/ti_logo_mono.svg" alt="logo">
+    </a>
+    FFTLIB Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/TexasInstruments/c7x_fftlib" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    c7x_fftlib
+    <span class="ti-branch">main</span>
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_started.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39S16.66.269 11 5.93c-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.55.56 1.37.74 2.12.46A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61m-7.07 7.07c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../repository_layout.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 3h6v4H3zm12 7h6v4h-6zm0 7h6v4h-6zm-2-4H7v5h6v2H5V9h2v2h6z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Repository Layout</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="index.html" class="md-nav__link ">
+              
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1 .91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            <span>API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="fft_c7_se_sa_kernels_fft_c7x.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>FFT — C7 SE/SA Kernels <wbr>(fft_<wbr>c7x)</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            <span>FFT — C7 SE/SA Kernels <wbr>(fft_<wbr>c7x)</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFT_C7X.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>C7x Only Fast Fourier Transform <wbr>(FFT) kernels</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_fft1d_i16sc_c16sc_o16sc.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>fft1d_<wbr>i16sc_<wbr>c16sc_<wbr>o16sc</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc</span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc</span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#breathe-section-title-defines" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Defines</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_FFT1D_I32F_C32FC_O32FC_PBLOCK_SIZE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>FFT1D_<wbr>I32F_<wbr>C32FC_<wbr>O32FC_<wbr>PBLOCK_<wbr>SIZE</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#breathe-section-title-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Functions</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc_<wbr>init</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFTLIB_fft1d_i32f_c32fc_o32fc_init">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pX (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span>buf<wbr>Params<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span>p<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span>buf<wbr>Params<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pXFFT (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsXFFT (C function parameter) — [in] : Pointer to the structure containing dimensional information of of pXFFT buffer"><span>buf<wbr>Params<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pSf (C function parameter) — [in] : Pointer to buffer with split factors"><span>p<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsSf (C function parameter) — [in] : Pointer to the structure containing dimensional information of split factor buffer"><span>buf<wbr>Params<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pY (C function parameter) — [out] : Pointer to buffer with output data"><span>p<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional information of output buffer"><span>buf<wbr>Params<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pBlock" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pBlock (C function parameter) — [out] : Pointer to the buffer that will hold the streaming engine parameters"><span>p<wbr>Block</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc_<wbr>kernel</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pX (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span>buf<wbr>Params<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span>p<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span>buf<wbr>Params<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pXFFT (C function parameter) — [in] : Pointer to temp. buffer with FFT of input data"><span>p<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsXFFT (C function parameter) — [in] : Pointer to the structure containing dimensional information of of pXFFT buffer"><span>buf<wbr>Params<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pSf (C function parameter) — [in] : Pointer to buffer with split factors"><span>p<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsSf (C function parameter) — [in] : Pointer to the structure containing dimensional information of split factor buffer"><span>buf<wbr>Params<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pY (C function parameter) — [out] : Pointer to buffer with output data"><span>p<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional information of output buffer"><span>buf<wbr>Params<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pBlock" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pBlock (C function parameter) — [in] : Pointer to the buffer that will hold the streaming engine parameters"><span>p<wbr>Block</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc_<wbr>check<wbr>Params</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pX (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span>buf<wbr>Params<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span>p<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span>buf<wbr>Params<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pY (C function parameter) — [out] : Pointer to buffer with output data"><span>p<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional"><span>buf<wbr>Params<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pBlock" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pBlock (C function parameter) — [in] : Pointer to the buffer that will hold the streaming engine parameters"><span>p<wbr>Block</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_fft1d_i32fc_c32fc_o32fc.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>fft1d_<wbr>i32fc_<wbr>c32fc_<wbr>o32fc</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_fft1dBatched_i16sc_c16sc_o16sc.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>fft1d<wbr>Batched_<wbr>i16sc_<wbr>c16sc_<wbr>o16sc</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_fft1dBatched_i32f_c32fc_o32fc.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>fft1d<wbr>Batched_<wbr>i32f_<wbr>c32fc_<wbr>o32fc</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_fft1dBatched_i32fc_c32fc_o32fc.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>fft1d<wbr>Batched_<wbr>i32fc_<wbr>c32fc_<wbr>o32cf</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_ifft1d_i32fc_c32fc_o32f.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>ifft1d_<wbr>i32fc_<wbr>c32fc_<wbr>o32f</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_ifft1d_i32fc_c32fc_o32fc.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>ifft1d_<wbr>i32fc_<wbr>c32fc_<wbr>o32fc</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_ifft1dBatched_i32fc_c32fc_o32f.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>ifft1d<wbr>Batched_<wbr>i32fc_<wbr>c32fc_<wbr>o32f</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FFTLIB_ifft1dBatched_i32fc_c32fc_o32fc.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFTLIB_<wbr>ifft1d<wbr>Batched_<wbr>i32fc_<wbr>c32fc_<wbr>o32cf</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="fft_c7_mma_dft_kernels_fft_c7xmma_c7100_c7120_only.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>FFT — C7+MMA DFT Kernels <wbr>(fft_<wbr>c7xmma, C7100/C7120 only)</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="linear_algebra.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Linear Algebra</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="common.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Common</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../perf/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m16 11.78 4.24-7.33 1.73 1-5.23 9.05-6.51-3.75L5.46 19H22v2H2V3h2v14.54L9.5 8z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Performance</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-1.27 0-2.4.8-2.82 2H3v2h1.95L2 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3L6.05 7h3.12c.33.85.98 1.5 1.83 1.83V20H2v2h20v-2h-9V8.82c.85-.32 1.5-.97 1.82-1.82h3.13L15 14c-.47 2 1 3 3.5 3s4.06-1 3.5-3l-2.95-7H21V5h-6.17C14.4 3.8 13.27 3 12 3m0 2a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-6.5 5.25L7 14H4zm13 0L20 14h-3z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>License</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#breathe-section-title-defines" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Defines</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_FFT1D_I32F_C32FC_O32FC_PBLOCK_SIZE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>FFT1D_<wbr>I32F_<wbr>C32FC_<wbr>O32FC_<wbr>PBLOCK_<wbr>SIZE</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#breathe-section-title-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Functions</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc_<wbr>init</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFTLIB_fft1d_i32f_c32fc_o32fc_init">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pX (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span>buf<wbr>Params<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span>p<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span>buf<wbr>Params<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pXFFT (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsXFFT (C function parameter) — [in] : Pointer to the structure containing dimensional information of of pXFFT buffer"><span>buf<wbr>Params<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pSf (C function parameter) — [in] : Pointer to buffer with split factors"><span>p<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsSf (C function parameter) — [in] : Pointer to the structure containing dimensional information of split factor buffer"><span>buf<wbr>Params<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pY (C function parameter) — [out] : Pointer to buffer with output data"><span>p<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional information of output buffer"><span>buf<wbr>Params<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pBlock" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_init.pBlock (C function parameter) — [out] : Pointer to the buffer that will hold the streaming engine parameters"><span>p<wbr>Block</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc_<wbr>kernel</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pX (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span>buf<wbr>Params<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span>p<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span>buf<wbr>Params<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pXFFT (C function parameter) — [in] : Pointer to temp. buffer with FFT of input data"><span>p<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsXFFT" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsXFFT (C function parameter) — [in] : Pointer to the structure containing dimensional information of of pXFFT buffer"><span>buf<wbr>Params<wbr>XFFT</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pSf (C function parameter) — [in] : Pointer to buffer with split factors"><span>p<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsSf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsSf (C function parameter) — [in] : Pointer to the structure containing dimensional information of split factor buffer"><span>buf<wbr>Params<wbr>Sf</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pY (C function parameter) — [out] : Pointer to buffer with output data"><span>p<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional information of output buffer"><span>buf<wbr>Params<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pBlock" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_kernel.pBlock (C function parameter) — [in] : Pointer to the buffer that will hold the streaming engine parameters"><span>p<wbr>Block</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>FFTLIB_<wbr>fft1d_<wbr>i32f_<wbr>c32fc_<wbr>o32fc_<wbr>check<wbr>Params</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pX (C function parameter) — [in] : Pointer to buffer with input data"><span>p<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsX" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span>buf<wbr>Params<wbr>X</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span>p<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsW" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span>buf<wbr>Params<wbr>W</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pY (C function parameter) — [out] : Pointer to buffer with output data"><span>p<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsY" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional"><span>buf<wbr>Params<wbr>Y</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pBlock" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams.pBlock (C function parameter) — [in] : Pointer to the buffer that will hold the streaming engine parameters"><span>p<wbr>Block</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="fftlib-fft1d-i32f-c32fc-o32fc">FFTLIB_fft1d_i32f_c32fc_o32fc<a class="headerlink" href="#fftlib-fft1d-i32f-c32fc-o32fc" title="Link to this heading">¶</a></h1>
+<dl class="objdesc">
+<dt class="sig sig-object highlight cpp">
+<span class="target" id="group__FFTLIB__fft1d__i32f__c32fc__o32fc"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">FFTLIB_fft1d_i32f_c32fc_o32fc</span></span></dt>
+<dd><p>Kernel for computing 32-bit floating-point real to complex FFT. </p>
+<p><ul class="simple">
+<li><p>The kernel performs FFT of an N-point real sequence using N/2-point complex FFT, which saves compute time</p></li>
+<li><p>The size of data is required to be a power of 2.</p></li>
+<li><p>The kernel requires application to provide a pre-generated twiddle factors along with the input data.</p></li>
+<li><p>The kernel requires application to provide a pre-generated split factors along with the input data. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-defines">Defines<a class="headerlink" href="#breathe-section-title-defines" title="Permalink to this headline">¶</a></p>
+<dl class="c macro objdesc">
+<dt class="sig sig-object highlight c" id="c.FFTLIB_FFT1D_I32F_C32FC_O32FC_PBLOCK_SIZE">
+<span class="target" id="group__FFTLIB__fft1d__i32f__c32fc__o32fc_1gac8a5a16a1592a787e3074822425e8100"></span><span class="sig-name descname"><span class="n"><span class="pre">FFTLIB_FFT1D_I32F_C32FC_O32FC_PBLOCK_SIZE</span></span></span><a class="headerlink" href="#c.FFTLIB_FFT1D_I32F_C32FC_O32FC_PBLOCK_SIZE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Macro to define the array size for storing SE/SA parameters. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions<a class="headerlink" href="#breathe-section-title-functions" title="Permalink to this headline">¶</a></p>
+<dl class="c function objdesc">
+<dt class="sig sig-object highlight sig-wrap c" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init">
+<span class="target" id="group__FFTLIB__fft1d__i32f__c32fc__o32fc_1ga2482fca4259d9c43332d6d10fabbe93d"></span><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_STATUS" title="FFTLIB_STATUS (C type) — Return value for FFTLIB functions."><span class="n"><span class="pre">FFTLIB_STATUS</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FFTLIB_fft1d_i32f_c32fc_o32fc_init</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pX" title="pX (C function parameter) — [in] : Pointer to buffer with input data"><span class="n"><span class="pre">pX</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsX" title="bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span class="n"><span class="pre">bufParamsX</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pW" title="pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span class="n"><span class="pre">pW</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsW" title="bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span class="n"><span class="pre">bufParamsW</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pXFFT" title="pXFFT (C function parameter) — [in] : Pointer to buffer with input data"><span class="n"><span class="pre">pXFFT</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsXFFT" title="bufParamsXFFT (C function parameter) — [in] : Pointer to the structure containing dimensional information of of pXFFT buffer"><span class="n"><span class="pre">bufParamsXFFT</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pSf" title="pSf (C function parameter) — [in] : Pointer to buffer with split factors"><span class="n"><span class="pre">pSf</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsSf" title="bufParamsSf (C function parameter) — [in] : Pointer to the structure containing dimensional information of split factor buffer"><span class="n"><span class="pre">bufParamsSf</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pY" title="pY (C function parameter) — [out] : Pointer to buffer with output data"><span class="n"><span class="pre">pY</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsY" title="bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional information of output buffer"><span class="n"><span class="pre">bufParamsY</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pBlock" title="pBlock (C function parameter) — [out] : Pointer to the buffer that will hold the streaming engine parameters"><span class="n"><span class="pre">pBlock</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init" title="Link to this definition">¶</a><br /></dt>
+<dd><p>This function should be called before the <a class="reference internal" href="#group__FFTLIB__fft1d__i32f__c32fc__o32fc_1gacdaac09a03f821d6d6b62e00b7afa0a5"><span class="std std-ref">FFTLIB_fft1d_i32f_c32fc_o32fc_kernel</span></a> function is called. This function takes care of any one-time operations such as setting up the configuration for the streaming engine. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pX"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pX</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pX" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with input data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsX"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsX</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsX" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of input buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pW"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pW</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pW" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with twiddle factors </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsW"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsW</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsW" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of twiddle factor buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pXFFT"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pXFFT</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pXFFT" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with input data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsXFFT"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsXFFT</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsXFFT" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of of pXFFT buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pSf"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pSf</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pSf" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with split factors </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsSf"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsSf</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsSf" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of split factor buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pY"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pY</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pY" title="Permalink to this definition">¶</a></dt><dd><p><strong>[out]</strong> : Pointer to buffer with output data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsY"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsY</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-bufParamsY" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of output buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pBlock"><span class="kt">void</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">pBlock</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-p-pBlock" title="Permalink to this definition">¶</a></dt><dd><p><strong>[out]</strong> : Pointer to the buffer that will hold the streaming engine parameters</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-returns">Returns<span class="colon">:</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_init-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>Status value indicating success or failure. Refer to <a class="reference internal" href="FFTLIB_COMMON.html#group__FFTLIB__COMMON_1gacc3121197e32e7db8146210edbdaea19"><span class="std std-ref">FFTLIB_STATUS</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function objdesc">
+<dt class="sig sig-object highlight sig-wrap c" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel">
+<span class="target" id="group__FFTLIB__fft1d__i32f__c32fc__o32fc_1gacdaac09a03f821d6d6b62e00b7afa0a5"></span><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_STATUS" title="FFTLIB_STATUS (C type) — Return value for FFTLIB functions."><span class="n"><span class="pre">FFTLIB_STATUS</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FFTLIB_fft1d_i32f_c32fc_o32fc_kernel</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pX" title="pX (C function parameter) — [in] : Pointer to buffer with input data"><span class="n"><span class="pre">pX</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsX" title="bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span class="n"><span class="pre">bufParamsX</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pW" title="pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span class="n"><span class="pre">pW</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsW" title="bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span class="n"><span class="pre">bufParamsW</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pXFFT" title="pXFFT (C function parameter) — [in] : Pointer to temp. buffer with FFT of input data"><span class="n"><span class="pre">pXFFT</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsXFFT" title="bufParamsXFFT (C function parameter) — [in] : Pointer to the structure containing dimensional information of of pXFFT buffer"><span class="n"><span class="pre">bufParamsXFFT</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pSf" title="pSf (C function parameter) — [in] : Pointer to buffer with split factors"><span class="n"><span class="pre">pSf</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsSf" title="bufParamsSf (C function parameter) — [in] : Pointer to the structure containing dimensional information of split factor buffer"><span class="n"><span class="pre">bufParamsSf</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pY" title="pY (C function parameter) — [out] : Pointer to buffer with output data"><span class="n"><span class="pre">pY</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsY" title="bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional information of output buffer"><span class="n"><span class="pre">bufParamsY</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pBlock" title="pBlock (C function parameter) — [in] : Pointer to the buffer that will hold the streaming engine parameters"><span class="n"><span class="pre">pBlock</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel" title="Link to this definition">¶</a><br /></dt>
+<dd><p>This function is the main kernel compute function. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pX"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pX</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pX" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with input data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsX"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsX</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsX" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of input buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pW"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pW</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pW" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with twiddle factors </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsW"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsW</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsW" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of twiddle factor buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pXFFT"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pXFFT</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pXFFT" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to temp. buffer with FFT of input data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsXFFT"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsXFFT</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsXFFT" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of of pXFFT buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pSf"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pSf</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pSf" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with split factors </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsSf"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsSf</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsSf" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of split factor buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pY"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pY</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pY" title="Permalink to this definition">¶</a></dt><dd><p><strong>[out]</strong> : Pointer to buffer with output data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsY"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsY</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-bufParamsY" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of output buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pBlock"><span class="kt">void</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">pBlock</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-p-pBlock" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the buffer that will hold the streaming engine parameters</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-returns">Returns<span class="colon">:</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_kernel-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>Status value indicating success or failure. Refer to <a class="reference internal" href="FFTLIB_COMMON.html#group__FFTLIB__COMMON_1gacc3121197e32e7db8146210edbdaea19"><span class="std std-ref">FFTLIB_STATUS</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function objdesc">
+<dt class="sig sig-object highlight sig-wrap c" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams">
+<span class="target" id="group__FFTLIB__fft1d__i32f__c32fc__o32fc_1gab8ce94b0135916845c7770e53931686a"></span><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_STATUS" title="FFTLIB_STATUS (C type) — Return value for FFTLIB functions."><span class="n"><span class="pre">FFTLIB_STATUS</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pX" title="pX (C function parameter) — [in] : Pointer to buffer with input data"><span class="n"><span class="pre">pX</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsX" title="bufParamsX (C function parameter) — [in] : Pointer to the structure containing dimensional information of input buffer"><span class="n"><span class="pre">bufParamsX</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pW" title="pW (C function parameter) — [in] : Pointer to buffer with twiddle factors"><span class="n"><span class="pre">pW</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsW" title="bufParamsW (C function parameter) — [in] : Pointer to the structure containing dimensional information of twiddle factor buffer"><span class="n"><span class="pre">bufParamsW</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n"><span class="pre">FFTLIB_F32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pY" title="pY (C function parameter) — [out] : Pointer to buffer with output data"><span class="n"><span class="pre">pY</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">FFTLIB_bufParams1D_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsY" title="bufParamsY (C function parameter) — [in] : Pointer to the structure containing dimensional"><span class="n"><span class="pre">bufParamsY</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n reference internal" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pBlock" title="pBlock (C function parameter) — [in] : Pointer to the buffer that will hold the streaming engine parameters"><span class="n"><span class="pre">pBlock</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams" title="Link to this definition">¶</a><br /></dt>
+<dd><p>This function checks the validity of the parameters passed to <a class="reference internal" href="#group__FFTLIB__fft1d__i32f__c32fc__o32fc_1ga2482fca4259d9c43332d6d10fabbe93d"><span class="std std-ref">FFTLIB_fft1d_i32f_c32fc_o32fc_init</span></a> and <a class="reference internal" href="#group__FFTLIB__fft1d__i32f__c32fc__o32fc_1gacdaac09a03f821d6d6b62e00b7afa0a5"><span class="std std-ref">FFTLIB_fft1d_i32f_c32fc_o32fc_kernel</span></a> functions. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pX"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pX</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pX" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with input data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsX"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsX</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsX" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of input buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pW"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pW</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pW" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to buffer with twiddle factors </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsW"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsW</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsW" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional information of twiddle factor buffer </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pY"><a class="desctype reference internal" href="FFTLIB_COMMON.html#c.FFTLIB_F32" title="FFTLIB_F32 (C type) — Single precision floating point."><span class="n">FFTLIB_F32</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-name">pY</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pY" title="Permalink to this definition">¶</a></dt><dd><p><strong>[out]</strong> : Pointer to buffer with output data </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsY"><span class="n">FFTLIB_bufParams1D_t</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">bufParamsY</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-bufParamsY" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the structure containing dimensional </p>
+</dd>
+<dt id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pBlock"><span class="kt">void</span><span class="w"> </span><span class="p">*</span><span class="n sig-name">pBlock</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-p-pBlock" title="Permalink to this definition">¶</a></dt><dd><p><strong>[in]</strong> : Pointer to the buffer that will hold the streaming engine parameters</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-returns">Returns<span class="colon">:</span><a class="headerlink" href="#c.FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>Status value indicating success or failure. Refer to <a class="reference internal" href="FFTLIB_COMMON.html#group__FFTLIB__COMMON_1gacc3121197e32e7db8146210edbdaea19"><span class="std std-ref">FFTLIB_STATUS</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    Aug 07, 2026
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2026, Texas Instruments Incorporated.
+        
+    </div>
+  
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "search.highlight", "toc.follow"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+        <script src="../_static/design-tabs.js?v=f930bc37"></script>
+        <script src="../_static/vendor/datatables/jquery.min.js?v=94f7166b"></script>
+        <script src="../_static/vendor/datatables/datatables.min.js?v=e27c3200"></script>
+        <script src="../_static/vendor/datatables/fixedHeader.min.js?v=3d35c829"></script>
+        <script src="../_static/perf-tables.js?v=0478bbc7"></script>
+    
+  </body>
+</html>
