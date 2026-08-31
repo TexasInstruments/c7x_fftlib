@@ -48,7 +48,7 @@ template <typename dataType> void FFTLIB_debugPrintMatrix_helperU(dataType *matr
       xPtr = yPtr;
       FFTLIB_PRINTF("%p |", xPtr);
       for (x = 0; x < params->dim_x; x++) {
-         FFTLIB_PRINTF("%3d ", static_cast<unsigned int>(*xPtr));
+         FFTLIB_PRINTF("%3u ", static_cast<unsigned int>(*xPtr));
          xPtr++;
       }
       FFTLIB_PRINTF("%s", "|\n");

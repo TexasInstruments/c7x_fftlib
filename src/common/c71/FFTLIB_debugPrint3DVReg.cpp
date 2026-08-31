@@ -67,7 +67,7 @@ template <typename dataType> void FFTLIB_debugPrint3DVReg_helperU(dataType *matr
       for (r = 0; r < params->dim_y; r++) {
          xPtr = yPtr;
          for (c = 0; c < params->dim_x; c++) {
-            FFTLIB_PRINTF("%3d, ", static_cast<unsigned int>(*xPtr));
+            FFTLIB_PRINTF("%3u, ", static_cast<unsigned int>(*xPtr));
             xPtr++;
          }
          FFTLIB_PRINTF("%s", "\n");
