@@ -159,7 +159,7 @@ extern "C" {
  * \details
  */
 
-/* @{ */
+/** @{ */
 
 typedef double FFTLIB_D64; //!< Double precision floating point
 typedef float  FFTLIB_F32; //!< Single precision floating point
@@ -272,7 +272,7 @@ typedef enum {
 /*              << FFTLIB_MMA_SIZE_32_BIT_SHIFT)) //!< Shift for MMA size when data */
 /*                                                //!< type is 32-bit integers */
 
-/* @} */
+/** @} */
 
 /******************************************************************************
  *
@@ -282,7 +282,7 @@ typedef enum {
 /*!
  * @cond
  */
-/* @{ */
+/** @{ */
 
 /* ---------------------------------------------------------------- */
 /*  MISRAC Rule 4.9(DEFINE.FUNC) Deviation: The advisory is not     */
@@ -388,7 +388,7 @@ extern const __HWA_OFFSET_REG offsetRegStruct_diagonal_16bit;
 extern const __HWA_OFFSET_REG offsetRegStruct_diagonal_8bit;
 #endif
 
-/* @} */
+/** @} */
 /** @endcond  */
 
 #ifdef __cplusplus

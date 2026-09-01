@@ -115,8 +115,7 @@ extern FFTLIB_STATUS FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_exec_ci(FFTL
  *  @brief This function is the initialization function for the natural C
  *         implementation of the kernel.
  *
- * @details This function populates some of the private fields of @ref
- * FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_PrivArgs
+ * @details This function populates some of the private fields of @ref FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_PrivArgs
  *
  *  @param [in]  handle       :  Active handle to the kernel
  *  @param [in]  src0_addr    :  Pointer to structure containing dimensional

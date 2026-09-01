@@ -111,7 +111,7 @@ extern "C" {
  * \details
  */
 
-/* @{ */
+/** @{ */
 
 /*! \brief The enumeration of possible activation operations on the computation.
  */
@@ -172,9 +172,7 @@ typedef FFTLIB_quantMethod_type_e FFTLIB_quantMethod_type; //!< Type for initDyn
    ((int32_t) (((uint32_t) 1) << FFTLIB_MMA_SIZE_32_BIT_SHIFT)) //!< Shift for MMA size when data
                                                                 //!< type is 32-bit integers
 
-/* @} */
-
-/* @} */
+/** @} */
 
 #ifdef __cplusplus
 }

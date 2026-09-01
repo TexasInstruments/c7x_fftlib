@@ -14,7 +14,7 @@
  * @details
  */
 
-/* @{ */
+/** @{ */
 
 static inline int32_t FFTLIB_sizeof(uint32_t type);
 
@@ -151,5 +151,5 @@ static inline int32_t FFTLIB_sizeof(uint32_t type)
    return size;
 }
 
-/* @} */
+/** @} */
 #endif /* FFTLIB_BUFPARAMS_H_ */

@@ -12,8 +12,7 @@
  * \brief   use streaming engine 0 to load numRows of A
  *          compute C(row) = A(row) x Bfore(:,:)
  * \details
- * \param numRows
- * \return  void
+ * \param[in] numRows  Number of rows of A to load and compute
  */
 /******************************************************************************/
 #ifdef __cplusplus
