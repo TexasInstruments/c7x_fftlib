@@ -82,12 +82,12 @@ int FFTLIB_fft1dBatched_i32f_c32fc_o32fc_d(uint32_t *pProfile, uint8_t LevelOfFe
       pW = (FFTLIB_F32 *) TI_memalign(128, numPoints * sizeof(FFTLIB_F32));
 #if defined(__C7504__) || defined(__C7524__)
       pXCn    = (FFTLIB_F32 *) ddrBuffer;
-      pXFFTCn = (FFTLIB_F32 *) pXCn + numPoints * numChannels * sizeof(FFTLIB_F32);
+      pXFFTCn = pXCn + numPoints * numChannels;
 #else
       pXCn    = (FFTLIB_F32 *) msmcBuffer;
-      pXFFTCn = (FFTLIB_F32 *) pXCn + numPoints * numChannels * sizeof(FFTLIB_F32);
+      pXFFTCn = pXCn + numPoints * numChannels;
 #endif
-      pYCn = pXFFTCn + (numPoints) *numChannels * sizeof(FFTLIB_F32);
+      pYCn = pXFFTCn + numPoints * numChannels;
       /* pYCn = (FFTLIB_F32 *) malloc (numPoints * 2 * sizeof (FFTLIB_F32)); */
 
       /* #if defined(__C7504__) */
@@ -151,16 +151,19 @@ int FFTLIB_fft1dBatched_i32f_c32fc_o32fc_d(uint32_t *pProfile, uint8_t LevelOfFe
          TI_fillBuffer(STATIC, 0, pX, pXCn, numPoints * numChannels, 1, 1, sizeof(FFTLIB_F32), testPatternString);
 
          /* run warm instruction cache test */
-         TI_profile_start(TI_PROFILE_KERNEL_OPT_WARM);
-         FFTLIB_asm(" MARK 2");
-         uint32_t p = 0;
-
-         status_opt = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_kernel(
+         uint32_t k = 0;
+         for (k = 0; k < 4; k++)
+         {
+            TI_profile_clear_cycle_count_single(TI_PROFILE_KERNEL_OPT_WARM);
+            TI_profile_start(TI_PROFILE_KERNEL_OPT_WARM);
+            FFTLIB_asm(" MARK 2");
+            status_opt = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_kernel(
              (FFTLIB_F32 *) pX, &bufParamsData, (FFTLIB_F32 *) pW, &bufParamsData, (FFTLIB_F32 *) pXFFT, &bufParamsData,
              (FFTLIB_F32 *) pSf, &bufParamsData, (FFTLIB_F32 *) pY, &bufParamsData, numPoints, numChannels, outmode,
              FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
-         FFTLIB_asm(" MARK 3");
-         TI_profile_stop();
+            FFTLIB_asm(" MARK 3");
+            TI_profile_stop();
+         }
 
          TI_fillBuffer(STATIC, 0, pX, pXCn, numPoints * numChannels, 1, 1, sizeof(FFTLIB_F32), testPatternString);
 
@@ -268,9 +271,7 @@ int FFTLIB_fft1dBatched_i32f_c32fc_o32fc_d(uint32_t *pProfile, uint8_t LevelOfFe
 
       TI_align_free(pX);
       TI_align_free(pXFFT);
-#if !defined(__C7504__)
       TI_align_free(pSf);
-#endif
       TI_align_free(pY);
       TI_align_free(pW);
       /* free (pYCn); */
@@ -298,20 +299,193 @@ int test_main(uint32_t *pProfile)
    }
 }
 
+int coverage_test_main()
+{
+   const uint32_t numPoints = 60U;
+
+   uint32_t testNum = 1000;
+   int32_t  fail    = 0;
+
+   FFTLIB_bufParams1D_t bufParamsData;
+   bufParamsData.dim_x     = numPoints;
+
+   bufParamsData.data_type = FFTLIB_FLOAT32;
+
+   const uint32_t numChannels  = 1U;
+   const uint32_t numPointsOut = (numPoints >> 1) + 1U; /* outmode == 0 */
+
+   FFTLIB_F32 *pX = (FFTLIB_F32 *) TI_memalign(128, numChannels * numPoints * sizeof(FFTLIB_F32));
+   FFTLIB_F32 *pW = (FFTLIB_F32 *) TI_memalign(128, numPoints * sizeof(FFTLIB_F32));
+   FFTLIB_F32 *pY = (FFTLIB_F32 *) TI_memalign(128, numPointsOut * numChannels * 2U * sizeof(FFTLIB_F32));
+
+   if (!pX || !pW || !pY) {
+      sprintf(desc, "%s", "COVERAGE TEST - allocation failure");
+      TI_profile_skip_test(desc);
+      TI_align_free(pX);
+      TI_align_free(pW);
+      TI_align_free(pY);
+      return 1;
+   }
+
+   while (testNum <= 1012) {
+      FFTLIB_bufParams1D_t bufParamsX  = bufParamsData;
+      FFTLIB_bufParams1D_t bufParamsW  = bufParamsData;
+      FFTLIB_bufParams1D_t bufParamsY  = bufParamsData;
+      uint32_t             numChannels = 1U;
+      uint8_t              outmode     = 0U; /* valid: 0 or 1 */
+      FFTLIB_STATUS        status_opt = FFTLIB_SUCCESS, status_nat = FFTLIB_SUCCESS;
+      int32_t              currentTestFail = 0;
+
+      switch (testNum) {
+      case 1000: /* NULL pX */
+         status_opt      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(NULL, &bufParamsX, pW, &bufParamsW, pY,
+                                                                            &bufParamsY, numPoints, numChannels, outmode,
+                                                                            FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(NULL, &bufParamsX, pW, &bufParamsW, pY,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1001: /* NULL pW */
+         status_opt      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, NULL, &bufParamsW, pY,
+                                                                            &bufParamsY, numPoints, numChannels, outmode,
+                                                                            FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, NULL, &bufParamsW, pY,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1002: /* NULL pY */
+         status_opt      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, NULL,
+                                                                            &bufParamsY, numPoints, numChannels, outmode,
+                                                                            FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, NULL,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1003: /* bufParamsX->dim_x != bufParamsW->dim_x */
+         bufParamsW.dim_x = numPoints / 2U;
+         status_opt       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                             &bufParamsY, numPoints, numChannels, outmode,
+                                                                             FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                                &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail  = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1004: /* bufParamsX->dim_x != bufParamsY->dim_x */
+         bufParamsY.dim_x = numPoints / 2U;
+         status_opt       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                             &bufParamsY, numPoints, numChannels, outmode,
+                                                                             FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                                &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail  =((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1005: /* bufParamsX->data_type != FFTLIB_FLOAT32 */
+         bufParamsX.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt           = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                                 &bufParamsY, numPoints, numChannels, outmode,
+                                                                                 FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1006: /* bufParamsW->data_type != FFTLIB_FLOAT32 */
+         bufParamsW.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt           = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                                 &bufParamsY, numPoints, numChannels, outmode,
+                                                                                 FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1007: /* bufParamsY->data_type != FFTLIB_FLOAT32 */
+         bufParamsY.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt           = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                                 &bufParamsY, numPoints, numChannels, outmode,
+                                                                                 FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1008: { /* pX not 16-byte aligned */
+         FFTLIB_F32 *pXMisaligned = (FFTLIB_F32 *) (((int8_t *) pX) + sizeof(FFTLIB_F32));
+         status_opt = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pXMisaligned, &bufParamsX, pW, &bufParamsW, pY,
+                                                                       &bufParamsY, numPoints, numChannels, outmode,
+                                                                       FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pXMisaligned, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NOT_ALIGNED_PTRS_STRIDES) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+      } break;
+      case 1009: /* outmode not 0 or 1 */
+         outmode         = 2U;
+         status_opt      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                            &bufParamsY, numPoints, numChannels, outmode,
+                                                                            FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_OUTMODE) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+         break;
+      case 1010: /* dim_x = 61 */
+         bufParamsX.dim_x = 61U;
+         bufParamsW.dim_x = 61U;
+         bufParamsY.dim_x = 61U;
+         status_opt       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                             &bufParamsY, numPoints, numChannels, outmode,
+                                                                             FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                                &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail  = ((status_opt != FFTLIB_SUCCESS) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1011: { /* numPoints = 254 = 2*127 */
+         uint32_t numPoints = 254U;
+         bufParamsX.dim_x = numPoints * numChannels;
+         bufParamsW.dim_x = bufParamsX.dim_x;
+         bufParamsY.dim_x = bufParamsX.dim_x;
+         status_opt       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                             &bufParamsY, numPoints, numChannels, outmode,
+                                                                             FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat       = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                                &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail  = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+      } break;
+      case 1012:
+         status_opt      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                            &bufParamsY, numPoints, numChannels, outmode,
+                                                                            FFTLIB_fft1dBatched_i32f_c32fc_o32fc_pBlock);
+         status_nat      = FFTLIB_fft1dBatched_i32f_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY,
+                                                                               &bufParamsY, numPoints, numChannels, outmode);
+         currentTestFail = ((status_opt != FFTLIB_SUCCESS) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+         break;
+      default:
+         break;
+      }
+
+      fail = ((fail == 1) || (currentTestFail == 1)) ? 1 : 0;
+
+      sprintf(desc, "%s", "COVERAGE TEST");
+      TI_profile_add_test(testNum++, 0, 0, 0, currentTestFail, desc);
+   }
+
+   TI_align_free(pX);
+   TI_align_free(pW);
+   TI_align_free(pY);
+
+   return fail;
+}
+
 /* Main call for individual test projects */
 #if !defined(__ONESHOTTEST) && !defined(RTL_TEST)
 int main()
 {
-   int fail = 1;
+   int test_fail = 1, cov_fail = 1;
 
    uint32_t profile[256 * 3];
 
    FFTLIB_TEST_init();
 
-   fail = test_main(&profile[0]);
+   test_fail = test_main(&profile[0]);
+   cov_fail  = coverage_test_main();
 
 #if !defined(NO_PRINTF)
-   if (fail == 0)
+   if ((test_fail == 0) && (cov_fail == 0))
       printf("Test Pass!\n");
    else
       printf("Test Fail!\n");
@@ -324,6 +498,10 @@ int main()
    }
 #endif
 
-   return fail;
+   return test_fail || cov_fail;
 }
 #endif
+
+/* ======================================================================== */
+/*  End of file:  FFTLIB_fft1dBatched_i32f_c32fc_o32fc_d.c                        */
+/* ======================================================================== */

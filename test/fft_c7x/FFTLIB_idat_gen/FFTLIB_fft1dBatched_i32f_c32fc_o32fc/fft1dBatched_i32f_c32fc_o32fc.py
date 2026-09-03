@@ -34,12 +34,10 @@ class FFTLIB_fft1dBatched_i32f_c32fc_o32fc:
         Returns:
             numpy array: Complex output array
         """
-        gInput_complex = gInput.astype(np.complex128)
-
         if self.outmode == 0:
-            G = np.fft.rfft(gInput_complex, axis=1)
+            G = np.fft.rfft(gInput.astype(np.float64), axis=1)
         else:
-            G = np.fft.fft(gInput_complex, axis=1)
+            G = np.fft.fft(gInput.astype(np.complex128), axis=1)
 
         G = np.round(G, 6)
         return G

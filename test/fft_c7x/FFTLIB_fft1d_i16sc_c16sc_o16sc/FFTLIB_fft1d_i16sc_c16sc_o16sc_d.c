@@ -225,6 +225,7 @@ not remove
       TI_align_free(pX);
       TI_align_free(pY);
       TI_align_free(pW);
+      TI_align_free(pShift);
       /* free (pXCn); */
       /* free (pYCn); */
    }
@@ -251,20 +252,214 @@ int test_main(uint32_t *pProfile)
    }
 }
 
+int coverage_test_main()
+{
+   const uint32_t numPoints = 64U; /* 4^numShifts, so the power-of-4 branch
+                                    * of the dim_x check is satisfied at the
+                                    * baseline */
+   const uint32_t numShifts = 3U;
+   uint32_t       testNum   = 1000;
+   int32_t        fail      = 0;
+
+   FFTLIB_bufParams1D_t bufParamsData;
+   bufParamsData.dim_x     = numPoints * 2U;
+   bufParamsData.data_type = FFTLIB_INT16;
+
+   FFTLIB_bufParams1D_t bufParamsShiftData;
+   bufParamsShiftData.dim_x     = numShifts;
+   bufParamsShiftData.data_type = FFTLIB_UINT32;
+
+   int16_t  *pX     = (int16_t *) TI_memalign(64, numPoints * 2U * sizeof(int16_t));
+   int16_t  *pW     = (int16_t *) TI_memalign(64, numPoints * 2U * sizeof(int16_t));
+   int16_t  *pY     = (int16_t *) TI_memalign(64, numPoints * 2U * sizeof(int16_t));
+   uint32_t *pShift = (uint32_t *) TI_memalign(64, numShifts * sizeof(uint32_t));
+
+   if (!pX || !pW || !pY || !pShift) {
+      sprintf(desc, "%s", "COVERAGE TEST - allocation failure");
+      TI_profile_skip_test(desc);
+      TI_align_free(pX);
+      TI_align_free(pW);
+      TI_align_free(pY);
+      TI_align_free(pShift);
+      return 1;
+   }
+
+   while (testNum <= 1015) {
+      FFTLIB_bufParams1D_t bufParamsX     = bufParamsData;
+      FFTLIB_bufParams1D_t bufParamsW     = bufParamsData;
+      FFTLIB_bufParams1D_t bufParamsY     = bufParamsData;
+      FFTLIB_bufParams1D_t bufParamsShift = bufParamsShiftData;
+      FFTLIB_STATUS        status_opt = FFTLIB_SUCCESS, status_nat = FFTLIB_SUCCESS;
+      int32_t              currentTestFail = 0;
+
+      switch (testNum) {
+      case 1000: /* NULL pX */
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(NULL, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(NULL, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1001: /* NULL pW */
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, NULL, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, NULL, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1002: /* NULL pY */
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, NULL, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, NULL, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1003: /* NULL pShift */
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, NULL,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    NULL, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1004: /* NULL pBlock; checkParams_cn takes no pBlock argument, so
+                  * it is expected to still succeed */
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                 pShift, &bufParamsShift, NULL);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+         break;
+      case 1005: /* bufParamsX->dim_x != bufParamsW->dim_x */
+         bufParamsW.dim_x = numPoints;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1006: /* bufParamsX->dim_x != bufParamsY->dim_x */
+         bufParamsY.dim_x = numPoints;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1007: /* bufParamsX->dim_x below the minimum of 64*2 */
+         bufParamsX.dim_x = 64U;
+         bufParamsW.dim_x = 64U;
+         bufParamsY.dim_x = 64U;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1008: /* bufParamsX->data_type != FFTLIB_INT16 */
+         bufParamsX.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1009: /* bufParamsW->data_type != FFTLIB_INT16 */
+         bufParamsW.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1010: /* bufParamsY->data_type != FFTLIB_INT16 */
+         bufParamsY.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1011: /* bufParamsShift->data_type != FFTLIB_UINT32 */
+         bufParamsShift.data_type = (uint32_t) FFTLIB_INT16;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1012: { /* pX not 16-byte aligned; checkParams_cn has no
+                    * alignment check, so it is expected to still succeed */
+         int16_t *pXMisaligned = (int16_t *) (((int8_t *) pX) + sizeof(int16_t));
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pXMisaligned, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                        pShift, &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pXMisaligned, &bufParamsX, pW, &bufParamsW, pY,
+                                                                    &bufParamsY, pShift, &bufParamsShift);
+         currentTestFail =
+             ((status_opt != FFTLIB_ERR_NOT_ALIGNED_PTRS_STRIDES) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+      } break;
+      case 1013: /* dim_x = 256 on the success
+                  * path */
+         bufParamsX.dim_x = 256U;
+         bufParamsW.dim_x = 256U;
+         bufParamsY.dim_x = 256U;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_SUCCESS) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+         break;
+      case 1014: /* dim_x matches neither the power-of-4 nor power-of-2 form
+                  * for numShifts */
+         bufParamsX.dim_x = 192U;
+         bufParamsW.dim_x = 192U;
+         bufParamsY.dim_x = 192U;
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail =
+             ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1015:
+         status_opt = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY, pShift,
+                                                        &bufParamsShift, FFTLIB_fft1d_i16sc_c16sc_o16sc_pBlock);
+         status_nat = FFTLIB_fft1d_i16sc_c16sc_o16sc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                    pShift, &bufParamsShift);
+         currentTestFail = ((status_opt != FFTLIB_SUCCESS) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+         break;
+      default:
+         break;
+      }
+
+      fail = ((fail == 1) || (currentTestFail == 1)) ? 1 : 0;
+
+      sprintf(desc, "%s", "COVERAGE TEST");
+      TI_profile_add_test(testNum++, 0, 0, 0, currentTestFail, desc);
+   }
+
+   TI_align_free(pX);
+   TI_align_free(pW);
+   TI_align_free(pY);
+   TI_align_free(pShift);
+
+   return fail;
+}
+
 /* Main call for individual test projects */
 #if !defined(__ONESHOTTEST) && !defined(RTL_TEST)
 int main()
 {
-   int fail = 1;
+   int test_fail = 1, cov_fail = 1;
 
    uint32_t profile[256 * 3];
 
    FFTLIB_TEST_init();
 
-   fail = test_main(&profile[0]);
+   test_fail = test_main(&profile[0]);
+   cov_fail  = coverage_test_main();
 
 #if !defined(NO_PRINTF)
-   if (fail == 0)
+   if ((test_fail == 0) && (cov_fail == 0))
       printf("Test Pass!\n");
    else
       printf("Test Fail!\n");
@@ -277,6 +472,6 @@ int main()
    }
 #endif
 
-   return fail;
+   return test_fail || cov_fail;
 }
 #endif

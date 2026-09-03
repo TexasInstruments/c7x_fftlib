@@ -169,16 +169,28 @@ FFTLIB_fft1d_i32f_c32fc_o32fc_checkParams_cn(FFTLIB_F32           *pX,
       status = FFTLIB_ERR_INVALID_TYPE;
    }
    else {
-      /* Check if number of pts is a power of 2 */
-      uint32_t k = 0;
-      while (k < 32U) {
-         if ((bufParamsX->dim_x & (1u << k)) != 0u) {
-            break;
-         }
-         k++;
-      }
-      if ((1u << k) != bufParamsX->dim_x) {
+      /* Check if number of pts is even (for split-factor real FFT) */
+      if ((bufParamsX->dim_x & 1U) != 0U) {
          status = FFTLIB_ERR_INVALID_DIMENSION;
+      }
+      else {
+         /* Check if numPoints/2 is a power of {2, 3, 5} */
+         uint32_t temp = bufParamsX->dim_x >> 1; // half numPoints
+         uint32_t i;
+
+         for (i = 0U; i < 32U && (temp % 5U == 0U); ++i) {
+            temp /= 5U;
+         }
+         for (i = 0U; i < 32U && (temp % 3U == 0U); ++i) {
+            temp /= 3U;
+         }
+         for (i = 0U; i < 32U && (temp % 2U == 0U); ++i) {
+            temp /= 2U;
+         }
+
+         if (temp != 1U) {
+            status = FFTLIB_ERR_INVALID_DIMENSION;
+         }
       }
    }
    return (status);

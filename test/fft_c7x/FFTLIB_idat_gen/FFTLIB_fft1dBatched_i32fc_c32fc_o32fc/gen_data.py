@@ -65,21 +65,12 @@ def gen_idat_file(idatFile, testCases):
     """
     idatFile.write("static fft1dBatched_testParams_t testParams[] = {\n\n")
 
-    first_16point = True
     for testCase in testCases:
 
         testId = testCase["ID"]
         testType = testCase["testType"]
         numPoints = testCase["numPoints"]
         numChannels = testCase["numChannels"]
-
-        if numPoints == 16 and first_16point:
-            idatFile.write("#if !defined(__C7504__) && !defined(__C7524__)\n")
-            first_16point = False
-
-        if numPoints != 16 and not first_16point:
-            idatFile.write("#endif\n\n")
-            first_16point = True
 
         idatFile.write(
             "#if (defined(ALL_TEST_CASES) || (TEST_CATEGORY == 200)"
@@ -112,21 +103,7 @@ def gen_idat_file(idatFile, testCases):
         idatFile.write("        %d,%s// test ID\n" % (testId, testId_spaces))
         idatFile.write("    },\n")
         idatFile.write("#endif")
-        if numPoints == 16 and not first_16point:
-            idx = testCases.index(testCase)
-            if idx < len(testCases) - 1:
-                next_numPoints = testCases[idx + 1]["numPoints"]
-                if next_numPoints != 16:
-                    idatFile.write("\n")
-                else:
-                    idatFile.write("\n\n")
-            else:
-                idatFile.write("\n")
-        else:
-            idatFile.write("\n\n")
-
-    if not first_16point:
-        idatFile.write("\n#endif\n")
+        idatFile.write("\n\n")
 
     idatFile.write("};\n\n")
     with open("test_param_function.txt", "r") as fIn:
@@ -183,7 +160,7 @@ def gen_test_case_header_file(testCase):
 
 testCasesCsvFile = "test_cases_list.csv"
 testIdList = []
-testIdList += range(0, 100)
+testIdList += range(0, 200)
 
 
 # Read CSV and process test cases
