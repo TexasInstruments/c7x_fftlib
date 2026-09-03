@@ -29,6 +29,9 @@ FFTLIB_ifft1dBatched_i32fc_c32fc_o32f_checkParams_cn(FFTLIB_F32           *pX,
                                                      FFTLIB_F32           *pW,
                                                      FFTLIB_bufParams1D_t *bufParamsW,
                                                      FFTLIB_F32           *pY,
-                                                     FFTLIB_bufParams1D_t *bufParamsY);
+                                                     FFTLIB_bufParams1D_t *bufParamsY,
+                                                     uint32_t              numPoints,
+                                                     uint32_t              numChannels,
+                                                     uint8_t               inMode);
 
 #endif

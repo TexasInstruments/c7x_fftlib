@@ -31,12 +31,10 @@ FFTLIB_ifft1d_i32fc_c32fc_o32f_init(FFTLIB_F32           *pX,
 {
    FFTLIB_STATUS status = FFTLIB_SUCCESS;
 
-   /* #if defined(FFTLIB_CHECK_PARAMS) || \ */
-   /*     defined(FFTLIB_FFT1D_I32FC_C32FC_O32FC_CHECK_PARAMS) */
-   /*    status = FFTLIB_ifft1d_i32fc_c32fc_o32f_checkParams ( */
-   /*        pX, bufParamsX, pW, bufParamsW, pY, bufParamsY, pBlock); */
-   /*    if (status == FFTLIB_SUCCESS) */
-   /* #endif */
+#if defined(FFTLIB_CHECK_PARAMS) || defined(FFTLIB_IFFT1D_I32FC_C32FC_O32F_CHECK_PARAMS)
+   status = FFTLIB_ifft1d_i32fc_c32fc_o32f_checkParams(pX, bufParamsX, pW, bufParamsW, pY, bufParamsY, pBlock);
+   if (status == FFTLIB_SUCCESS)
+#endif
    {
 
       uint32_t         numPoints;
@@ -54,7 +52,7 @@ FFTLIB_ifft1d_i32fc_c32fc_o32f_init(FFTLIB_F32           *pX,
                                            bufPtr, &((uint8_t *) pBlock)[5 * SE_PARAM_SIZE]);
 
       uint32_t elementCount = c7x::element_count_of<CV>::value;
-      uint32_t SEBlocks     = (numPoints >> 1) / elementCount;
+      uint32_t SEBlocks     = ((numPoints >> 1) + elementCount - 1) / elementCount;
       uint32_t offset       = numPoints >> 1;
 
       se0_param.ICNT0 = elementCount;
@@ -130,7 +128,7 @@ FFTLIB_ifft1d_i32fc_c32fc_o32f_kernel(FFTLIB_F32 *restrict pX,
 
 #pragma MUST_ITERATE(8, , 8)
 #pragma UNROLL(8)
-   for (i = 0; i < (numPoints >> 1) / (elementCount); i++) {
+   for (i = 0; i < ((numPoints >> 1) + elementCount - 1) / (elementCount); i++) {
       var0 = c7x::strm_eng<0, CV>::get_adv();
       var1 = c7x::strm_eng<0, CV>::get_adv();
 
@@ -161,8 +159,8 @@ FFTLIB_ifft1d_i32fc_c32fc_o32f_kernel(FFTLIB_F32 *restrict pX,
    return status;
 }
 
-#if (!defined(FFTLIB_REMOVE_CHECK_PARAMS) && !defined(FFTLIB_FFT1D_I32FC_C32FC_O32FC_REMOVE_CHECK_PARAMS)) ||          \
-    (defined(FFTLIB_CHECK_PARAMS)) || (defined(FFTLIB_FFT1D_I32FC_C32FC_O32FC_CHECK_PARAMS))
+#if (!defined(FFTLIB_REMOVE_CHECK_PARAMS) && !defined(FFTLIB_IFFT1D_I32FC_C32FC_O32F_REMOVE_CHECK_PARAMS)) ||          \
+    (defined(FFTLIB_CHECK_PARAMS)) || (defined(FFTLIB_IFFT1D_I32FC_C32FC_O32F_CHECK_PARAMS))
 
 FFTLIB_STATUS
 FFTLIB_ifft1d_i32fc_c32fc_o32f_checkParams(FFTLIB_F32           *pX,
@@ -175,40 +173,39 @@ FFTLIB_ifft1d_i32fc_c32fc_o32f_checkParams(FFTLIB_F32           *pX,
 {
    FFTLIB_STATUS status = FFTLIB_SUCCESS;
 
-   /* if ((pX == NULL) || (pW == NULL) || (pY == NULL)) { */
-   /*    status = FFTLIB_ERR_NULL_POINTER; */
-   /* } */
-   /* else if (bufParamsX->dim_x != bufParamsW->dim_x || */
-   /*          bufParamsX->dim_x != bufParamsY->dim_x) { */
-   /*    status = FFTLIB_ERR_INVALID_DIMENSION; */
-   /* } */
-   /* else if (bufParamsX->dim_x < 64 * 2) { /\* Minimum number of points is 64
-    * *\/ */
-   /*    status = FFTLIB_ERR_INVALID_DIMENSION; */
-   /* } */
-   /* else if ((bufParamsX->data_type != FFTLIB_FLOAT32) || */
-   /*          (bufParamsW->data_type != FFTLIB_FLOAT32) || */
-   /*          (bufParamsY->data_type != FFTLIB_FLOAT32)) { */
-   /*    status = FFTLIB_ERR_INVALID_TYPE; */
-   /* } */
-   /* else if (((uint64_t) pX) & 0xFu) { /\* pX must be 16-byte aligned for a
-    * *\/ */
-   /*    status = FFTLIB_ERR_NOT_ALIGNED_PTRS_STRIDES; /\* streaming engine */
-   /*                                                     configuration *\/ */
-   /* } */
-   /* else { */
-   /*    /\* Check if number of pts is a power of 2 *\/ */
-   /*    uint32_t k = 0; */
-   /*    while (k < 32) { */
-   /*       if (bufParamsX->dim_x & (1u << k)) { */
-   /*          break; */
-   /*       } */
-   /*       k++; */
-   /*    } */
-   /*    if ((1u << k) != bufParamsX->dim_x) { */
-   /*       status = FFTLIB_ERR_INVALID_DIMENSION; */
-   /*    } */
-   /* } */
+   if ((pX == NULL) || (pW == NULL) || (pY == NULL)) {
+      status = FFTLIB_ERR_NULL_POINTER;
+   }
+   else if (bufParamsX->dim_x != bufParamsW->dim_x || bufParamsX->dim_x != bufParamsY->dim_x) {
+      status = FFTLIB_ERR_INVALID_DIMENSION;
+   }
+   else if ((bufParamsX->data_type != FFTLIB_FLOAT32) || (bufParamsW->data_type != FFTLIB_FLOAT32) ||
+            (bufParamsY->data_type != FFTLIB_FLOAT32)) {
+      status = FFTLIB_ERR_INVALID_TYPE;
+   }
+   else if (((uint64_t) pX) & 0xFu) { /* pX must be 16-byte aligned for a
+                                       * streaming engine configuration */
+      status = FFTLIB_ERR_NOT_ALIGNED_PTRS_STRIDES;
+   }
+   else {
+      /* Check if numPoints is a product of {2, 3, 5} */
+      uint32_t temp = bufParamsX->dim_x / 2U;
+      uint32_t i;
+
+      for (i = 0; i < 32U && (temp % 5U == 0U); ++i) {
+         temp /= 5U;
+      }
+      for (i = 0; i < 32U && (temp % 3U == 0U); ++i) {
+         temp /= 3U;
+      }
+      for (i = 0; i < 32U && (temp % 2U == 0U); ++i) {
+         temp /= 2U;
+      }
+
+      if (temp != 1) {
+         status = FFTLIB_ERR_INVALID_DIMENSION;
+      }
+   }
    return (status);
 }
 

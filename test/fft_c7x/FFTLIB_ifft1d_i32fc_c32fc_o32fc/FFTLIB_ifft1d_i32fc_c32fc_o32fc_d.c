@@ -13,8 +13,14 @@
 #include "FFTLIB_ifft1d_i32fc_c32fc_o32fc_cn.h"
 #include "FFTLIB_ifft1d_i32fc_c32fc_o32fc_idat.h"
 
+#if defined(__C7504__) || defined(__C7524__)
+__attribute__((section(".l2sramaux"), aligned(64))) int8_t l2auxBuffer[FFTLIB_L2_BUFFER_SIZE];
+__attribute__((section(".ddrData"), aligned(64))) int8_t   ddrBuffer[2048 * 1024];
+
+#else
 __attribute__((section(".msmcData"), aligned(64))) int8_t msmcBuffer[FFTLIB_L3_RESULTS_BUFFER_SIZE];
 __attribute__((section(".ddrData"), aligned(64))) int8_t  ddrBuffer[2048 * 1024];
+#endif
 
 int16_t volatile volatileSum = 0;
 
@@ -23,22 +29,69 @@ uint8_t FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock[FFTLIB_FFT1D_I32FC_C32FC_O32FC_PB
 
 void tw_gen(FFTLIB_F32 *pW, int32_t numPoints)
 {
-   int32_t      i, j, k, t;
+   int32_t      i, j, k = 0, t;
    const double PI = 3.141592654;
-   t               = numPoints >> 2;
-   for (j = 1, k = 0; j <= numPoints >> 2; j = j << 2) {
-      for (i = 0; i < numPoints >> 2; i += j) {
-         /* TODO: Big endian requires different format of Twiddle factors? */
-         pW[k]             = (FFTLIB_F32) cos(2 * PI * i / numPoints);
-         pW[k + 1]         = (FFTLIB_F32) -sin(2 * PI * i / numPoints);
-         pW[k + 2 * t]     = (FFTLIB_F32) cos(4 * PI * i / numPoints);
-         pW[k + 2 * t + 1] = (FFTLIB_F32) -sin(4 * PI * i / numPoints);
-         pW[k + 4 * t]     = (FFTLIB_F32) cos(6 * PI * i / numPoints);
-         pW[k + 4 * t + 1] = (FFTLIB_F32) -sin(6 * PI * i / numPoints);
-         k += 2;
+
+   if (numPoints % 5 == 0) {
+      /* Radix-5 stage twiddles */
+      int32_t numPointsStage = numPoints;
+      t = numPoints / 5U;
+      for (j = 1; j <= numPoints / 5U && numPointsStage % 5 == 0; j = j * 5U) {
+         for (i = 0; i < numPoints / 5U; i += j) {
+            pW[k]             = (FFTLIB_F32) cos (2 * PI * i / numPoints);
+            pW[k + 1]         = (FFTLIB_F32) -sin (2 * PI * i / numPoints);
+            pW[k + 2 * t]     = (FFTLIB_F32) cos (4 * PI * i / numPoints);
+            pW[k + 2 * t + 1] = (FFTLIB_F32) -sin (4 * PI * i / numPoints);
+            pW[k + 4 * t]     = (FFTLIB_F32) cos (6 * PI * i / numPoints);
+            pW[k + 4 * t + 1] = (FFTLIB_F32) -sin (6 * PI * i / numPoints);
+            pW[k + 6 * t]     = (FFTLIB_F32) cos (8 * PI * i / numPoints);
+            pW[k + 6 * t + 1] = (FFTLIB_F32) -sin (8 * PI * i / numPoints);
+            k += 2;
+         }
+         k += t * 6;
+         t = t / 5U;
+         numPointsStage /= 5;
       }
-      k += (t) *4;
-      t = t >> 2;
+      numPoints = numPointsStage;
+   }
+
+   if (numPoints % 3 == 0) {
+      /* Radix-3 stage twiddles */
+      int32_t numPointsStage = numPoints;
+      t = numPoints / 3U;
+      for (j = 1; j <= numPoints / 3U && numPointsStage % 3 == 0; j = j * 3U) {
+         for (i = 0; i < numPoints / 3U; i += j) {
+            pW[k]             = (FFTLIB_F32) cos (2 * PI * i / numPoints);
+            pW[k + 1]         = (FFTLIB_F32) -sin (2 * PI * i / numPoints);
+            pW[k + 2 * t]     = (FFTLIB_F32) cos (4 * PI * i / numPoints);
+            pW[k + 2 * t + 1] = (FFTLIB_F32) -sin (4 * PI * i / numPoints);
+            k += 2;
+         }
+         k += t * 2;
+         t = t / 3U;
+         numPointsStage /= 3;
+      }
+      numPoints = numPointsStage;
+   }
+
+   /* RADIX-4 stage twiddles */
+   if (numPoints % 4 == 0) {
+      int32_t numPointsStage = numPoints;
+      t = numPoints >> 2;
+      for (j = 1; j <= numPoints >> 2 && numPointsStage % 4 == 0; j = j << 2) {
+         for (i = 0; i < numPoints >> 2; i += j) {
+            pW[k]             = (FFTLIB_F32) cos (2 * PI * i / numPoints);
+            pW[k + 1]         = (FFTLIB_F32) -sin (2 * PI * i / numPoints);
+            pW[k + 2 * t]     = (FFTLIB_F32) cos (4 * PI * i / numPoints);
+            pW[k + 2 * t + 1] = (FFTLIB_F32) -sin (4 * PI * i / numPoints);
+            pW[k + 4 * t]     = (FFTLIB_F32) cos (6 * PI * i / numPoints);
+            pW[k + 4 * t + 1] = (FFTLIB_F32) -sin (6 * PI * i / numPoints);
+            k += 2;
+         }
+         k += t * 4;
+         t = t >> 2;
+         numPointsStage /= 4;
+      }
    }
 }
 
@@ -56,8 +109,8 @@ int FFTLIB_ifft1d_i32fc_c32fc_o32fc_d(uint32_t *pProfile, uint8_t LevelOfFeedbac
 
    FILE *fpOutputCSV = fopen("FFTLIB_ifft1d_i32fc_c32fc_o32fc.csv", "w+");
    fprintf(fpOutputCSV, "Test ID,"
-                        "Num Points,"
-                        "EVM Cycles\n");
+                         "Num Points,"
+                         "EVM Cycles\n");
 
    for (tpi = 0; tpi < test_cases; tpi++) {
 
@@ -81,7 +134,11 @@ int FFTLIB_ifft1d_i32fc_c32fc_o32fc_d(uint32_t *pProfile, uint8_t LevelOfFeedbac
                                                                             * in kernel           */
       pY   = (FFTLIB_F32 *) TI_memalign(128, numPoints * 2 * sizeof(FFTLIB_F32));
       pW   = (FFTLIB_F32 *) TI_memalign(128, numPoints * 2 * sizeof(FFTLIB_F32));
-      pXCn = (FFTLIB_F32 *) msmcBuffer;
+#if defined(__C7504__) || defined(__C7524__)
+      pXCn    = (FFTLIB_F32 *) ddrBuffer;
+#else
+      pXCn    = (FFTLIB_F32 *) msmcBuffer;
+#endif
       pYCn = pXCn + numPoints * 2 * sizeof(FFTLIB_F32);
       /* pYCn = (FFTLIB_F32 *) malloc (numPoints * 2 * sizeof (FFTLIB_F32)); */
 
@@ -129,13 +186,20 @@ int FFTLIB_ifft1d_i32fc_c32fc_o32fc_d(uint32_t *pProfile, uint8_t LevelOfFeedbac
          TI_fillBuffer(STATIC, 0, pX, pXCn, numPoints * 2, 1, 1, sizeof(FFTLIB_F32), testPatternString);
 
          /* run warm instruction cache test */
-         TI_profile_start(TI_PROFILE_KERNEL_OPT_WARM);
-         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_kernel((FFTLIB_F32 *) pX, &bufParamsData, (FFTLIB_F32 *) pW,
-                                                             &bufParamsData, (FFTLIB_F32 *) pY, &bufParamsData,
-                                                             FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
-         TI_profile_stop();
+         uint32_t k;
+         for (k = 0; k < 4; k++) 
+         {
+            TI_profile_clear_cycle_count_single(TI_PROFILE_KERNEL_OPT_WARM);
+            TI_profile_start (TI_PROFILE_KERNEL_OPT_WARM);
+            status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_kernel (
+                (FFTLIB_F32 *) pX, &bufParamsData, (FFTLIB_F32 *) pW,
+                &bufParamsData, (FFTLIB_F32 *) pY, &bufParamsData,
+                FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+            TI_profile_stop ();
+         }
 
-         TI_fillBuffer(STATIC, 0, pX, pXCn, numPoints * 2, 1, 1, sizeof(FFTLIB_F32), testPatternString);
+         TI_fillBuffer (STATIC, 0, pX, pXCn, numPoints * 2, 1, 1,
+                        sizeof (FFTLIB_F32), testPatternString);
 
          // get output to L1D
          /* uint32_t row    = 0; */
@@ -228,20 +292,150 @@ int test_main(uint32_t *pProfile)
    }
 }
 
+int coverage_test_main()
+{
+   const uint32_t numPoints = 64U;
+   const uint32_t dimX      = numPoints * 2U;
+   uint32_t       testNum   = 1000;
+   int32_t        fail      = 0;
+
+   FFTLIB_bufParams1D_t bufParamsData;
+   bufParamsData.dim_x     = dimX;
+   bufParamsData.data_type = FFTLIB_FLOAT32;
+
+   FFTLIB_F32 *pX = (FFTLIB_F32 *) TI_memalign(128, dimX * sizeof(FFTLIB_F32));
+   FFTLIB_F32 *pW = (FFTLIB_F32 *) TI_memalign(128, dimX * sizeof(FFTLIB_F32));
+   FFTLIB_F32 *pY = (FFTLIB_F32 *) TI_memalign(128, dimX * sizeof(FFTLIB_F32));
+
+   if (!pX || !pW || !pY) {
+      sprintf(desc, "%s", "COVERAGE TEST - allocation failure");
+      TI_profile_skip_test(desc);
+      TI_align_free(pX);
+      TI_align_free(pW);
+      TI_align_free(pY);
+      return 1;
+   }
+
+   while (testNum <= 1010) {
+      FFTLIB_bufParams1D_t bufParamsX = bufParamsData;
+      FFTLIB_bufParams1D_t bufParamsW = bufParamsData;
+      FFTLIB_bufParams1D_t bufParamsY = bufParamsData;
+      FFTLIB_STATUS        status_opt = FFTLIB_SUCCESS, status_nat = FFTLIB_SUCCESS;
+      int32_t              currentTestFail = 0;
+
+      switch (testNum) {
+      case 1000: /* NULL pX */
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(NULL, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(NULL, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1001: /* NULL pW */
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, NULL, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, NULL, &bufParamsW, pY, &bufParamsY);
+                                                                     currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1002: /* NULL pY */
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, NULL, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, NULL, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NULL_POINTER) || (status_nat != FFTLIB_ERR_NULL_POINTER)) ? 1 : 0;
+         break;
+      case 1003: /* bufParamsX->dim_x != bufParamsW->dim_x */
+         bufParamsW.dim_x = dimX / 2U;
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1004: /* bufParamsX->dim_x != bufParamsY->dim_x */
+         bufParamsY.dim_x = dimX / 2U;
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1005: /* bufParamsX->data_type != FFTLIB_FLOAT32 */
+         bufParamsX.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1006: /* bufParamsW->data_type != FFTLIB_FLOAT32 */
+         bufParamsW.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1007: /* bufParamsY->data_type != FFTLIB_FLOAT32 */
+         bufParamsY.data_type = (uint32_t) FFTLIB_UINT32;
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_TYPE) || (status_nat != FFTLIB_ERR_INVALID_TYPE)) ? 1 : 0;
+         break;
+      case 1008: { /* pX not 16-byte aligned; checkParams_cn has no
+                    * alignment check, so it is expected to still succeed */
+         FFTLIB_F32 *pXMisaligned = (FFTLIB_F32 *) (((int8_t *) pX) + sizeof(FFTLIB_F32));
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pXMisaligned, &bufParamsX, pW, &bufParamsW, pY,
+                                                                  &bufParamsY, FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pXMisaligned, &bufParamsX, pW, &bufParamsW, pY,
+                                                                     &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_NOT_ALIGNED_PTRS_STRIDES) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+      } break;
+      case 1009: /* numPoints has a prime factor other than 2, 3 or 5 */
+         bufParamsX.dim_x = 7U * 2U;
+         bufParamsW.dim_x = bufParamsX.dim_x;
+         bufParamsY.dim_x = bufParamsX.dim_x;
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_ERR_INVALID_DIMENSION) || (status_nat != FFTLIB_ERR_INVALID_DIMENSION)) ? 1 : 0;
+         break;
+      case 1010: /* numPoints = 30 = 2*3*5 on the success path */
+         bufParamsX.dim_x = 30U * 2U;
+         bufParamsW.dim_x = bufParamsX.dim_x;
+         bufParamsY.dim_x = bufParamsX.dim_x;
+         status_opt = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY,
+                                                                  FFTLIB_ifft1d_i32fc_c32fc_o32fc_pBlock);
+         status_nat = FFTLIB_ifft1d_i32fc_c32fc_o32fc_checkParams_cn(pX, &bufParamsX, pW, &bufParamsW, pY, &bufParamsY);
+         currentTestFail = ((status_opt != FFTLIB_SUCCESS) || (status_nat != FFTLIB_SUCCESS)) ? 1 : 0;
+         break;
+      default:
+         break;
+      }
+
+      fail = ((fail == 1) || (currentTestFail == 1)) ? 1 : 0;
+
+      sprintf(desc, "%s", "COVERAGE TEST");
+      TI_profile_add_test(testNum++, 0, 0, 0, currentTestFail, desc);
+   }
+
+   TI_align_free(pX);
+   TI_align_free(pW);
+   TI_align_free(pY);
+
+   return fail;
+}
+
 /* Main call for individual test projects */
 #if !defined(__ONESHOTTEST) && !defined(RTL_TEST)
 int main()
 {
-   int fail = 1;
+   int test_fail = 1, cov_fail = 1;
 
    uint32_t profile[256 * 3];
 
    FFTLIB_TEST_init();
 
-   fail = test_main(&profile[0]);
+   test_fail = test_main(&profile[0]);
+   cov_fail  = coverage_test_main();
 
 #if !defined(NO_PRINTF)
-   if (fail == 0)
+   if ((test_fail == 0) && (cov_fail == 0))
       printf("Test Pass!\n");
    else
       printf("Test Fail!\n");
@@ -254,6 +448,10 @@ int main()
    }
 #endif
 
-   return fail;
+   return test_fail || cov_fail;
 }
 #endif
+
+/* ======================================================================== */
+/*  End of file:  FFTLIB_ifft1d_i32fc_c32fc_o32fc_d.c                        */
+/* ======================================================================== */

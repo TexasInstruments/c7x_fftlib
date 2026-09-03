@@ -15,12 +15,11 @@
  *          - The kernel performs IFFT of an N-point complex sequence using
  *            N/2-point complex IFFT to output a real sequence,
  *            which saves compute time
- *          - The size of data is required to be a power of 2.
+ *          - The size of data is required to be a power of 2 or power of 3 or power of 5.
  *          - The kernel requires application to provide a pre-generated
  *            twiddle factors along with the input data.
  *          - The kernel requires application to provide a pre-generated
  *            split factors along with the input data.
- *          - Supported sizes: 128 to 8192
  * @ingroup  FFT_C7X
  */
 /** @{ */
@@ -30,7 +29,7 @@
  */
 
 /* PBLOCK has to accommodate certain number of SE/SA configurations */
-#define FFTLIB_IFFT1D_I32FC_C32FC_O32F_PBLOCK_SIZE (18 * SE_PARAM_SIZE)
+#define FFTLIB_IFFT1D_I32FC_C32FC_O32F_PBLOCK_SIZE (34 * SE_PARAM_SIZE + 16 * sizeof(uint32_t))
 
 #ifdef __cplusplus
 extern "C" {
