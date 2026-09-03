@@ -2223,10 +2223,3 @@ void ifft1d_getTestParams(ifft1d_testParams_t** params, int32_t* numTests)
    *params   = testParams;
    *numTests = sizeof(testParams) / sizeof(ifft1d_testParams_t);
 }
-
-/* ======================================================================== */
-/*                       End of file                                        */
-/* ------------------------------------------------------------------------ */
-/*            Copyright (c) 2017 Texas Instruments, Incorporated.           */
-/*                           All Rights Reserved.                           */
-/* ======================================================================== */

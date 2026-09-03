@@ -6,10 +6,3 @@ void fft1dBatched_i16sc_c16sc_o16sc_getTestParams(fft1dBatched_i16sc_c16sc_o16sc
    *params   = testParams;
    *numTests = sizeof(testParams) / sizeof(fft1dBatched_i16sc_c16sc_o16sc_testParams_t);
 }
-
-/* ======================================================================== */
-/*                       End of file                                        */
-/* ------------------------------------------------------------------------ */
-/*            Copyright (c) 2017 Texas Instruments, Incorporated.           */
-/*                           All Rights Reserved.                           */
-/* ======================================================================== */
