@@ -6,10 +6,3 @@ void ifft1d_i32fc_c32fc_o32fc_getTestParams(ifft1d_i32fc_c32fc_o32fc_testParams_
    *params   = testParams;
    *numTests = sizeof(testParams) / sizeof(ifft1d_i32fc_c32fc_o32fc_testParams_t);
 }
-
-/* ======================================================================== */
-/*                       End of file                                        */
-/* ------------------------------------------------------------------------ */
-/*            Copyright (c) 2017 Texas Instruments, Incorporated.           */
-/*                           All Rights Reserved.                           */
-/* ======================================================================== */
