@@ -329,7 +329,7 @@ _PERF_DATA_ROOT = os.path.join(os.path.dirname(__file__), "perf_data")
 # (csv_subdir, human_title) — order preserved in each kernel page
 _PERF_DEVICES = [
     ("c7504", "C7504 (AM62D)"),
-    ("c7524", "C7524 (AM275)"),
+    ("c7524", "C7524 (AM275/AM283)"),
 ]
 
 
