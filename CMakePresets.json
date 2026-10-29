@@ -71,6 +71,31 @@
             }
         },
         {
+            "name": "base-am283",
+            "hidden": true,
+            "inherits": "base-common",
+            "cacheVariables": {
+                "SOC": "AM283",
+                "DEVICE": "C7524"
+            }
+        },
+        {
+            "name": "base-am283-target",
+            "hidden": true,
+            "inherits": "base-am283",
+            "cacheVariables": {
+                "TARGET_PLATFORM": "TARGET"
+            }
+        },
+        {
+            "name": "base-am283-pc",
+            "hidden": true,
+            "inherits": "base-am283",
+            "cacheVariables": {
+                "TARGET_PLATFORM": "PC"
+            }
+        },
+        {
             "name": "base-autotest",
             "hidden": true,
             "cacheVariables": {
@@ -158,6 +183,42 @@
             "description": "Debug build of all binaries for AM275 PC platform"
         },
         {
+            "name": "release-autotest-am283-target",
+            "inherits": ["base-am283-target", "base-autotest"],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "release"
+            },
+	    "displayName": "Release autotest for AM283 (target)",
+            "description": "Release build of all binaries for AM283 target platform"
+        },
+        {
+            "name": "debug-autotest-am283-target",
+            "inherits": ["base-am283-target", "base-autotest"],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "debug"
+            },
+	    "displayName": "Debug autotest for AM283 (target)",
+            "description": "Debug build of all binaries for AM283 target platform"
+        },
+        {
+            "name": "release-autotest-am283-pc",
+            "inherits": ["base-am283-pc", "base-autotest"],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "release"
+            },
+	    "displayName": "Release autotest for AM283 (PC)",
+            "description": "Release build of all binaries for AM283 PC platform"
+        },
+        {
+            "name": "debug-autotest-am283-pc",
+            "inherits": ["base-am283-pc", "base-autotest"],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "debug"
+            },
+	    "displayName": "Debug autotest for AM283 (PC)",
+            "description": "Debug build of all binaries for AM283 PC platform"
+        },
+        {
 		"name": "release-buildlib-am62d-pc",
 		"inherits": ["base-am62d-pc", "base-buildlib"],
 		"cacheVariables": {
@@ -209,6 +270,34 @@
 	    {
 	      "name": "debug-buildlib-am275-target",
 	      "inherits": ["base-am275-target", "base-buildlib"],
+	      "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "debug"
+	      }
+	    },
+	    {
+	      "name": "release-buildlib-am283-pc",
+	      "inherits": ["base-am283-pc", "base-buildlib"],
+	      "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "release"
+	      }
+	    },
+	    {
+	      "name": "debug-buildlib-am283-pc",
+	      "inherits": ["base-am283-pc", "base-buildlib"],
+	      "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "debug"
+	      }
+	    },
+	    {
+	      "name": "release-buildlib-am283-target",
+	      "inherits": ["base-am283-target", "base-buildlib"],
+	      "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "release"
+	      }
+	    },
+	    {
+	      "name": "debug-buildlib-am283-target",
+	      "inherits": ["base-am283-target", "base-buildlib"],
 	      "cacheVariables": {
 		"CMAKE_BUILD_TYPE": "debug"
 	      }

@@ -74,6 +74,7 @@ Top-level structure of the FFTLIB repository:
    <div class="rt-file rt-l1"><span class="rt-icon">&#128196;</span><span class="rt-name">CONTRIBUTING.md</span><span class="rt-desc">Contribution policy</span></div>
    <div class="rt-file rt-l1"><span class="rt-icon">&#128196;</span><span class="rt-name">makefile.am62dx.c75x.ti-c7000</span><span class="rt-desc">Standalone makefile (AM62D / C7504)</span></div>
    <div class="rt-file rt-l1"><span class="rt-icon">&#128196;</span><span class="rt-name">makefile.am275x.c75x.ti-c7000</span><span class="rt-desc">Standalone makefile (AM275 / C7524)</span></div>
+   <div class="rt-file rt-l1"><span class="rt-icon">&#128196;</span><span class="rt-name">makefile.am283x.c75x.ti-c7000</span><span class="rt-desc">Standalone makefile (AM283 / C7524)</span></div>
 
    <!-- cmake/ — leaf folder, no children shown -->
    <div class="rt-file rt-l1"><span class="rt-icon">&#128193;</span><span class="rt-name">cmake/</span><span class="rt-desc">CMake helper modules (toolchains, docs, tests)</span></div>
@@ -147,7 +148,7 @@ MMA DFT kernels — ``src/fft_c7xmma/``
 --------------------------------------
 
 The C7™+MMA DFT kernels (``FFTLIB_FFT_*``) target C7100 and C7120 cores only
-and are **not** supported on AM62D (C7504) or AM275 (C7524).
+and are **not** supported on AM62D (C7504), AM275 (C7524) or AM283 (C7524).
 
 Tests — ``test/fft_c7x/FFTLIB_<kernel>/``
 ------------------------------------------
