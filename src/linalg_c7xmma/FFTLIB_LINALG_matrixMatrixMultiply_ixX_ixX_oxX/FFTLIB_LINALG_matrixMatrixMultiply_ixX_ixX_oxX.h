@@ -128,11 +128,11 @@ FFTLIB_STATUS FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_init_checkParams(
  *
  *
  *  @param [in]  handle      : Active handle to the kernel
- *  @param [in]  src0[]      : Pointer to buffer holding the first matrix input
+ *  @param [in]  src0        : Pointer to buffer holding the first matrix input
  *                              [ A matrix]
- *  @param [in]  src1[]      : Pointer to buffer holding the second matrix input
+ *  @param [in]  src1        : Pointer to buffer holding the second matrix input
  *                              [ B matrix]
- *  @param [out] dst[]       : Pointer to buffer holding the output matrix
+ *  @param [out] dst         : Pointer to buffer holding the output matrix
  *                              [ C matrix]
 
  *  @return      Status of success or error with error codes, refer to @ref FFTLIB_STATUS.
@@ -165,11 +165,11 @@ FFTLIB_LINALG_matrixMatrixMultiply_ixX_ixX_oxX_exec(FFTLIB_kernelHandle handle,
  *               before kernel executuon. It can be called once
  *
  *  @param [in]  handle      : Active handle to the kernel
- *  @param [in]  src0[]      : Pointer to buffer holding the first matrix input
+ *  @param [in]  src0        : Pointer to buffer holding the first matrix input
  *                              [ A matrix]
- *  @param [in]  src1[]      : Pointer to buffer holding the second matrix input
+ *  @param [in]  src1        : Pointer to buffer holding the second matrix input
  *                              [ B matrix]
- *  @param [out] dst[]       : Pointer to buffer holding the output matrix
+ *  @param [out] dst         : Pointer to buffer holding the output matrix
  *                              [ C matrix]
 
 *  @return      Status of success or error with error codes, refer to @ref FFTLIB_STATUS.
