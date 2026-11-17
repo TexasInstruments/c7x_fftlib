@@ -541,5 +541,5 @@ html_css_files = [
 def setup(app):
     # Original RTD overrides (harmless, no matching .wy-* selectors in immaterial).
     app.add_css_file("css/theme_overrides.css")
-    # Immaterial-specific overrides: WIP banner, TI teal header, sig colouring.
+    # Immaterial-specific overrides: TI teal header, sig colouring.
     app.add_css_file("css/immaterial_overrides.css")
